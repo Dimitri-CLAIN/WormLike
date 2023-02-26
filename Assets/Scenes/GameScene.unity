@@ -373,8 +373,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18247fda275ef74481b2b208ee38cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playTime: 30
+  playTime: 6
   turnPrefab: {fileID: 7676094328107102557, guid: 230b07b2c962e394d9fad39faaab1872, type: 3}
+  ghostColor: {r: 1, g: 0, b: 0, a: 0.2}
+  meshRenderer: {fileID: 1130901393}
 --- !u!136 &1130901392
 CapsuleCollider:
   m_ObjectHideFlags: 0

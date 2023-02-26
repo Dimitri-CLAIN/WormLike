@@ -27,6 +27,8 @@ public class PlayerTurn : MonoBehaviour
 
     #endregion
 
+    public event Action OnPlayerTurnEnded;
+
     private void Start()
     {
         if (gameObject.TryGetComponent<Collider>(out Collider collider))
@@ -46,6 +48,7 @@ public class PlayerTurn : MonoBehaviour
         // TODO a turn can also end if the player clicks a "Ready" || "End Turn" button
         timer = turnTimer;
         yield return new WaitForSeconds(timer);
+        OnPlayerTurnEnded?.Invoke();
         Destroy(this.gameObject); // sync to server so 
     }
 
