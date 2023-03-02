@@ -872,7 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36972f2b9e9fc214299ae7c8cb1029cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnTime: 10
+  turnTime: 3
   intervalTime: 2
   players:
   - {fileID: 1417820301}
