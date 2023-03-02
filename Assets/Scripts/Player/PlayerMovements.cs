@@ -1,71 +1,60 @@
+﻿    
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class PlayerTurn : MonoBehaviour
+[RequireComponent(typeof(MyPlayer))]
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerMovements : MonoBehaviour
 {
-    private float timer;
+    [SerializeField]
+    private MyPlayer playerInstance;
 
     #region Movements
-
     [SerializeField]
     [Range(1, 5)]
     private float speed = 3f;
     private Vector3 velocity;
+    private float feetYCoordinates;
+    [SerializeField]
+    [Range(0.1f, 0.5f)]
+    private float distToGround = 0.1f;
+    
+
     [SerializeField]
     [Range(5, 20)]
     private float jumpForce = 15f;
-
     [SerializeField]
     private Rigidbody rb;
-    private float distToGround;
-
-    
-
     #endregion
-
-    public event Action OnPlayerTurnEnded;
 
     private void Start()
     {
         if (gameObject.TryGetComponent<Collider>(out Collider collider))
         {
-            distToGround = collider.bounds.extents.y;
+            feetYCoordinates = collider.bounds.extents.y;
         }
     }
 
-    public void SpawnPlayer(float turnTimer)
-    {
-        StartCoroutine(InitTurnTimer(turnTimer));
-    }
-
-
-    private IEnumerator InitTurnTimer(float turnTimer)
-    {
-        // TODO a turn can also end if the player clicks a "Ready" || "End Turn" button
-        timer = turnTimer;
-        yield return new WaitForSeconds(timer);
-        OnPlayerTurnEnded?.Invoke();
-        Destroy(this.gameObject); // sync to server so 
-    }
-
+    
     private void Update()
     {
+        velocity = rb.velocity;
+        if (GameManager.instance != null && GameManager.instance.inputSettings[playerInstance].InputEnabled == false)
+            return; // not your turn to play
+
         Move();
     }
 
-
+    
     private void FixedUpdate()
     {
         rb.velocity = velocity;
     }
-
-
+    
+    
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+        return Physics.Raycast(transform.position, -Vector3.up, feetYCoordinates + distToGround);
     }
     
     
@@ -88,8 +77,8 @@ public class PlayerTurn : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        // Vector3 direction = transform.TransformDirection(Vector3.down + 0.1f);
-        Vector3 direction = new Vector3(0, -(distToGround + 0.1f), 0);
+        // Vector3 direction = transform.TransformDirection(Vector3.down + distToGround);
+        Vector3 direction = new Vector3(0, -(feetYCoordinates + distToGround), 0);
         Gizmos.DrawRay(transform.position, direction);
     }
 
