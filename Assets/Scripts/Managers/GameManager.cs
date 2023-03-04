@@ -21,12 +21,15 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public readonly Dictionary<MyPlayer, UserInputSettings> inputSettings = new Dictionary<MyPlayer, UserInputSettings>();
 
+    private bool hasTurnEnded = false;
+
     private void Awake()
     {
         instance = this;
         foreach (MyPlayer player in players)
         {
             inputSettings[player] = new UserInputSettings();
+            player.OnTurnEnded += UpdateEndTurn;
         }
     }
 
@@ -37,30 +40,26 @@ public class GameManager : MonoBehaviour
         StartCoroutine(HandleTurn());
     }
 
-
-    [ContextMenu("Check Variables")]
-    private void CheckVariables()
-    {
-        foreach (MyPlayer p in players)
-        {
-            Debug.Log("<color=red>" + inputSettings[p] + "</color>");
-        }
-
-        Debug.Log("<color=blue>" + players[0] == players[1] + "</color>");
-        Debug.Log("<color=blue>" + inputSettings[players[0]] == inputSettings[players[1]] + "</color>");
-    }
-    
     
     private IEnumerator HandleTurn()
     {
-        foreach (MyPlayer player in players)
+        while (true)
         {
-            Debug.Log("<color=yellow>" + "turn => " + player.name + "</color>");
-            inputSettings[player].InputEnabled = true;
-            player.PlayTurn(turnTime);
-            yield return new WaitUntil(() => player.HasTurnEnded == true);
-            inputSettings[player].InputEnabled = false;
-            yield return new WaitForSeconds(intervalTime);
+            foreach (MyPlayer player in players)
+            {
+                inputSettings[player].InputEnabled = true;
+                player.PlayTurn(turnTime);
+                yield return new WaitUntil(() => hasTurnEnded == true);
+                inputSettings[player].InputEnabled = false;
+                hasTurnEnded = false;
+                yield return new WaitForSeconds(intervalTime);
+            }
         }
+    }
+
+
+    private void UpdateEndTurn()
+    {
+        hasTurnEnded = true;
     }
 }

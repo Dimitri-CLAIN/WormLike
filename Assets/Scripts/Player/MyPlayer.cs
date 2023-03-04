@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,18 +11,14 @@ public class MyPlayer : MonoBehaviour
     private Color originalColor = Color.white;
     [SerializeField]
     private MeshRenderer meshRenderer;
-    private bool hasTurnEnded = false;
-
-    public bool HasTurnEnded
-    {
-        get => hasTurnEnded;
-    }
     
-
+    public event Action OnTurnEnded;
+    
+    
     [ContextMenu("Play Turn")]
     public void PlayTurn(float turnTime)
     {
-        hasTurnEnded = false;
+        // hasTurnEnded = false;
         meshRenderer.material.color = playColor;
         StartCoroutine(StartTurn(turnTime));
     }
@@ -34,10 +31,10 @@ public class MyPlayer : MonoBehaviour
     }
 
 
-    private void EndTurn()
+    public void EndTurn()
     {
         // restore color
         meshRenderer.material.color = originalColor;
-        hasTurnEnded = true;
+        OnTurnEnded?.Invoke();
     }
 }
