@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MyPlayer : MonoBehaviour
+public class MyPlayer : NetworkBehaviour
 {
     public Color playColor = Color.red;
     private Color originalColor = Color.white;
+    [SyncVar(hook = nameof(HandleColorChanged))]
+    private Color color;
     [SerializeField]
     private MeshRenderer meshRenderer;
     
@@ -18,7 +21,7 @@ public class MyPlayer : MonoBehaviour
     public void PlayTurn(float turnTime)
     {
         // hasTurnEnded = false;
-        meshRenderer.material.color = playColor;
+        color = playColor;
         StartCoroutine(StartTurn(turnTime));
     }
 
@@ -33,7 +36,14 @@ public class MyPlayer : MonoBehaviour
     public void EndTurn()
     {
         // restore color
-        meshRenderer.material.color = originalColor;
+        color = originalColor;
         OnTurnEnded?.Invoke();
+    }
+
+
+    [Client]
+    private void HandleColorChanged(Color oldColor, Color newColor)
+    {
+        meshRenderer.material.color = newColor;
     }
 }

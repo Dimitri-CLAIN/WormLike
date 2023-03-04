@@ -57,6 +57,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/ParrelSync*
 
 # Crashlytics generated file
 crashlytics-build.properties

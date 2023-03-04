@@ -1,10 +1,11 @@
 ﻿    
 using System;
+using Mirror;
 using UnityEngine;
 
 [RequireComponent(typeof(MyPlayer))]
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovements : MonoBehaviour
+public class PlayerMovements : NetworkBehaviour
 {
     [SerializeField]
     private MyPlayer playerInstance;
@@ -34,11 +35,14 @@ public class PlayerMovements : MonoBehaviour
             feetYCoordinates = collider.bounds.extents.y;
         }
     }
-
     
+    
+    [ClientCallback]
     private void Update()
     {
         velocity = rb.velocity;
+        if (isOwned == false)
+            return;
         if (GameManager.instance == null || 
             GameManager.instance.inputSettings.ContainsKey(playerInstance) == false || 
             GameManager.instance.inputSettings[playerInstance].InputEnabled == false)
@@ -48,6 +52,7 @@ public class PlayerMovements : MonoBehaviour
     }
 
     
+    [ClientCallback]
     private void FixedUpdate()
     {
         rb.velocity = velocity;
@@ -59,7 +64,7 @@ public class PlayerMovements : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, feetYCoordinates + distToGround);
     }
     
-    
+    [Command]
     private void Move()
     {
         // TODO disable movement inputs while in the air (no air control cuz its funny this wae)

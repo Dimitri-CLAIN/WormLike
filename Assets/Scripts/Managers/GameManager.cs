@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
 
 
     [ContextMenu("Launch Game")]
+    [Server]
     private void LaunchGame()
     {
         StartCoroutine(HandleTurn());
@@ -81,5 +83,13 @@ public class GameManager : MonoBehaviour
         players.Add(p);
         inputSettings[p] = new UserInputSettings();
         p.OnTurnEnded += UpdateEndTurn;
+    }
+
+
+    public void RemovePlayer(MyPlayer p)
+    {
+        if (inputSettings.ContainsKey(p))
+            inputSettings.Remove(p);
+        players.Remove(p);
     }
 }
