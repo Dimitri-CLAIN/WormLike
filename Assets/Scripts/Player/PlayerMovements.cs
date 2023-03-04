@@ -39,7 +39,9 @@ public class PlayerMovements : MonoBehaviour
     private void Update()
     {
         velocity = rb.velocity;
-        if (GameManager.instance != null && GameManager.instance.inputSettings[playerInstance].InputEnabled == false)
+        if (GameManager.instance == null || 
+            GameManager.instance.inputSettings.ContainsKey(playerInstance) == false || 
+            GameManager.instance.inputSettings[playerInstance].InputEnabled == false)
             return; // not your turn to play
 
         Move();

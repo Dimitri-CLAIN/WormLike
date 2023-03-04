@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UserInputSettings
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
         instance = this;
         foreach (MyPlayer player in players)
         {
+
             inputSettings[player] = new UserInputSettings();
             player.OnTurnEnded += UpdateEndTurn;
         }
@@ -40,11 +42,19 @@ public class GameManager : MonoBehaviour
         StartCoroutine(HandleTurn());
     }
 
+
+    private bool ConditionForEndOfGameIsTrue()
+    {
+        // TODO
+        return false;
+    }
     
     private IEnumerator HandleTurn()
     {
         while (true)
         {
+            if (ConditionForEndOfGameIsTrue())
+                yield break;
             foreach (MyPlayer player in players)
             {
                 inputSettings[player].InputEnabled = true;
@@ -61,5 +71,15 @@ public class GameManager : MonoBehaviour
     private void UpdateEndTurn()
     {
         hasTurnEnded = true;
+    }
+
+
+    public void AddPlayer(MyPlayer p)
+    {
+        if (false) // max nb players or party already running
+            Debug.Log("<color=red>" + "Cannot add a player" + "</color>");
+        players.Add(p);
+        inputSettings[p] = new UserInputSettings();
+        p.OnTurnEnded += UpdateEndTurn;
     }
 }

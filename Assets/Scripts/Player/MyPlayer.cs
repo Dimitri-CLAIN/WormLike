@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class MyPlayer : MonoBehaviour
 {
-    [SerializeField]
-    private Color playColor = Color.red;
+    public Color playColor = Color.red;
     private Color originalColor = Color.white;
     [SerializeField]
     private MeshRenderer meshRenderer;
