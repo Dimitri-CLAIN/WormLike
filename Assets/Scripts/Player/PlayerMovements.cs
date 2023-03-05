@@ -14,6 +14,7 @@ public class PlayerMovements : NetworkBehaviour
     [SerializeField]
     [Range(1, 5)]
     private float speed = 3f;
+    private float previousInputHorizontal = 0f;
     private Vector3 velocity;
     private float feetYCoordinates;
     [SerializeField]
@@ -35,20 +36,36 @@ public class PlayerMovements : NetworkBehaviour
             feetYCoordinates = collider.bounds.extents.y;
         }
     }
-    
-    
+
+
+    public override void OnStartAuthority()
+    {
+        base.OnStartAuthority();
+        enabled = true;
+    }
+
+
     [ClientCallback]
     private void Update()
     {
         velocity = rb.velocity;
         if (isOwned == false)
             return;
+        foreach (var item in GameManager.instance.inputSettings)
+        {
+            if (item.Value.InputEnabled == true)
+                Debug.Log("<color=green>" + item.Key.name + "INPUTS ENABLED" + "</color>");
+            else
+            {
+                Debug.Log("<color=red>" + item.Key.name + "INPUTS DISABLED" + "</color>");
+            }
+        }
         if (GameManager.instance == null || 
             GameManager.instance.inputSettings.ContainsKey(playerInstance) == false || 
             GameManager.instance.inputSettings[playerInstance].InputEnabled == false)
             return; // not your turn to play
 
-        Move();
+        CmdMove();
     }
 
     
@@ -65,9 +82,16 @@ public class PlayerMovements : NetworkBehaviour
     }
     
     [Command]
-    private void Move()
+    private void CmdMove()
     {
         // TODO disable movement inputs while in the air (no air control cuz its funny this wae)
+        RpcMove();
+    }
+
+
+    [ClientRpc]
+    private void RpcMove()
+    {
         float horizontal = Input.GetAxis("Horizontal");
 
         velocity = new Vector3(horizontal * speed, 0, 0);
@@ -79,6 +103,7 @@ public class PlayerMovements : NetworkBehaviour
             velocity.y = rb.velocity.y;
         }
     }
+    
     
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()

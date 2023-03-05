@@ -76,6 +76,11 @@ public class GameManager : MonoBehaviour
     }
 
 
+    private void HandlePlayerList(List<MyPlayer> old, List<MyPlayer> newList)
+    {
+        players = newList;
+    }
+    
     public void AddPlayer(MyPlayer p)
     {
         if (false) // max nb players or party already running
