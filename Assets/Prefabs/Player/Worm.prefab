@@ -199,4 +199,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   movementSpeed: 5
+  jumpForce: 4
+  gravityMultiplier: 1
   controller: {fileID: 3754037417146107246}
+  distToGround: 0.225

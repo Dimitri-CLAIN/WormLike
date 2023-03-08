@@ -8,9 +8,15 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float movementSpeed = 5f;
     [SerializeField]
-    [Range(5, 20)]
+    [Range(1,10)]
     private float jumpForce = 5;
-    
+    Vector3 direction = Vector3.zero;
+    private float gravity = -9.81f;
+    [SerializeField]
+    [Range(1,10)]
+    private float gravityMultiplier = 5f;
+    private float velocity;
+
 
     [SerializeField]
     private CharacterController controller = null;
@@ -18,10 +24,6 @@ public class PlayerController : NetworkBehaviour
     private float previousMovement;
     private bool isJumpTriggered;
     private float feetYCoordinates;
-    [SerializeField]
-    [Range(0.1f, 0.5f)]
-    private float distToGround = 0.225f;
-    
 
 
     private Controls controls;
@@ -37,13 +39,7 @@ public class PlayerController : NetworkBehaviour
     public override void OnStartAuthority()
     {
         enabled = true;
-        if (gameObject.TryGetComponent(out Collider collider))
-        {
-            feetYCoordinates = collider.bounds.extents.y;
-        }
         
-        controls.Player.MoveQuadDir.performed += ctx => SetMovementQuadDir(ctx.ReadValue<Vector2>());
-        controls.Player.MoveQuadDir.canceled += ctx => ResetMovementQuadDir();
         controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
         controls.Player.Move.canceled += ctx => ResetMovement();
         controls.Player.Jump.performed += ctx => isJumpTriggered = true;
@@ -60,8 +56,15 @@ public class PlayerController : NetworkBehaviour
     {
         Controls.Disable();
     }
+
     [ClientCallback]
-    private void Update() => Move();
+    private void Update()
+    {
+        direction = new Vector3(previousMovement, 0);
+        // velocity.y = rb.velocity.y;
+        ApplyGravity();
+        Move();
+    }
 
     
     [Client]
@@ -70,21 +73,31 @@ public class PlayerController : NetworkBehaviour
     private void ResetMovement() => previousMovement = 0f;
     
     [Client]
-    private void SetMovementQuadDir(Vector2 movement) => previousInput = movement;
-    [Client]
-    private void ResetMovementQuadDir() => previousInput = Vector2.zero;
-
-    private bool IsGrounded() => Physics.Raycast(transform.position, -Vector3.up, feetYCoordinates + distToGround);
-
+    private void ApplyGravity()
+    {
+        if (controller.isGrounded && velocity < 0.0f)
+        {
+            velocity = -1.0f;
+        } else
+        {
+            velocity += gravity * gravityMultiplier * Time.deltaTime;
+        }
+        direction.y = velocity;
+    }
+    
+    
     [Client]
     private void Move()
     {
-        Vector3 movement = new Vector3(previousMovement, 0);
         if (isJumpTriggered == true)
-            movement.y = jumpForce;
-        // TODO else
- 
+        {
+            if (controller.isGrounded == true)
+            {
+                velocity += jumpForce;
+            }
+            isJumpTriggered = false;
+        }
 
-        controller.Move(movement * (movementSpeed * Time.deltaTime));
+        controller.Move(direction * (movementSpeed * Time.deltaTime));
     }
 }
