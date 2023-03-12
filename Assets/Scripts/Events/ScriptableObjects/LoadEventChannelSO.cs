@@ -14,7 +14,7 @@ public class LoadEventChannelSO : DescriptionBaseSO
     {
         if (OnLoadingRequested != null)
         {
-            OnLoadingRequested.Invoke(locationToLoad, showLoadingScreen, fadeScreen);
+            OnLoadingRequested?.Invoke(locationToLoad, showLoadingScreen, fadeScreen);
         }
         else
         {

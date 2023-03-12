@@ -14,6 +14,6 @@ public class BoolEventChannelSO : DescriptionBaseSO
 	public void RaiseEvent(bool value)
 	{
 		if (OnEventRaised != null)
-			OnEventRaised.Invoke(value);
+			OnEventRaised?.Invoke(value);
 	}
 }

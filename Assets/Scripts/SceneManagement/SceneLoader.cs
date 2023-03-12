@@ -14,9 +14,9 @@ public class SceneLoader: NetworkManager
     [SerializeField] private LoadEventChannelSO _loadMenu = default;
     [SerializeField] private LoadEventChannelSO _coldStartupLocation = default;
     
-    [SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
+    // [SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
     [SerializeField] private VoidEventChannelSO _onSceneReady = default;
-    [SerializeField] private FadeChannelSO _fadeRequestChannel = default;
+    // [SerializeField] private FadeChannelSO _fadeRequestChannel = default;
 
     private GameSceneSO _sceneToLoad;
     private GameSceneSO _currentlyLoadedScene;
@@ -73,16 +73,16 @@ public class SceneLoader: NetworkManager
         ServerChangeScene(menuToLoad.scenePath);
     }
 
-    void FinishLoadScene()
-    {
-        base.FinishLoadScene();
-        LightProbes.TetrahedralizeAsync();
-
-        if (_showLoadingScreen)
-			_toggleLoadingScreen.RaiseEvent(false);
-
-        StartGameplay();
-	}
+ //    void FinishLoadScene()
+ //    {
+ //        base.FinishLoadScene();
+ //        LightProbes.TetrahedralizeAsync();
+ //
+ //        if (_showLoadingScreen)
+	// 		_toggleLoadingScreen.RaiseEvent(false);
+ //
+ //        StartGameplay();
+	// }
 
 	private void StartGameplay()
 	{

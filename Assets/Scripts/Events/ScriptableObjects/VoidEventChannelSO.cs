@@ -9,6 +9,6 @@ public class VoidEventChannelSO : DescriptionBaseSO
     public void RaiseEvent()
     {
         if (OnEventRaised != null)
-            OnEventRaised.Invoke();
+            OnEventRaised?.Invoke();
     }
 }
