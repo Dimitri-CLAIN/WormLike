@@ -359,11 +359,11 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 6004727220672596586, guid: 87c21f514e14147e79724efbb5891c91, type: 3}
+  - {fileID: 3022441366768747206, guid: 87c21f514e14147e79724efbb5891c91, type: 3}
   timeInterpolationGui: 0
   _minPlayers: 2
   _lobbySceneName: Lobby_Scene
-  roomPlayerPrefab: {fileID: 2237967468405617435, guid: 87c21f514e14147e79724efbb5891c91, type: 3}
+  roomPlayerPrefab: {fileID: 7454315952752217872, guid: 87c21f514e14147e79724efbb5891c91, type: 3}
   gamePlayerPrefab: {fileID: 0}
   playerSpawnSystem: {fileID: 0}
   roundSystem: {fileID: 0}
@@ -578,6 +578,10 @@ PrefabInstance:
     - target: {fileID: 2021566222087769546, guid: b6487ece041804553a8bb34705f53a5c, type: 3}
       propertyPath: m_Name
       value: MainMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3973575573953257662, guid: b6487ece041804553a8bb34705f53a5c, type: 3}
+      propertyPath: m_TagString
+      value: LandingPage
       objectReference: {fileID: 0}
     - target: {fileID: 4476257577644107283, guid: b6487ece041804553a8bb34705f53a5c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

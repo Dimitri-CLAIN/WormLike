@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private NetworkManagerLobby _networkManager = null;
 
     [Header("UI")]
-    [SerializeField] private GameObject _landingPagePanel = null;
+    [SerializeField] public GameObject _landingPagePanel = null;
 
     public void HostLobby()
     {

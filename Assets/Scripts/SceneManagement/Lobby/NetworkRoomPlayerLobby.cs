@@ -1,6 +1,6 @@
 using TMPro;
 using Mirror;
-using Mirror.Examples.MultipleMatch;
+using Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,7 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     [SerializeField] private TMP_Text[] _playerNameTexts = new TMP_Text[4];
     [SerializeField] private TMP_Text[] _playerReadyTexts = new TMP_Text[4];
     [SerializeField] private Button _startGameButton = null;
+    [SerializeField] private Button _backGameButton = default;
     
     [SyncVar(hook = nameof(HandleDisplayNameChanged))]
     public string DisplayName = "Waiting...";
@@ -42,6 +43,22 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
             return room = NetworkManager.singleton as NetworkManagerLobby;
         }
     }
+
+    private void OnDestroy()
+    {
+        _backGameButton.onClick.RemoveAllListeners();
+    }
+
+    public void SetupBackButton()
+    {
+        _backGameButton.onClick.AddListener(() =>
+            {
+                GameObject.Find("MainMenu")!.GetComponent<MainMenu>()!._landingPagePanel.SetActive(true);
+                if (_isLeader) { NetworkManager.singleton.StopHost(); }
+                else { NetworkManager.singleton.StopClient(); }
+                Destroy(this);
+            });
+    }
     
     public override void OnStartAuthority()
     {
@@ -56,6 +73,7 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     {
         Room.RoomPlayers.Add(this);
 
+        SetupBackButton();
         SetupBasicDisplay();
         UpdateDisplay();
     }
@@ -74,8 +92,11 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     {
         if (Room.RoomPlayers.Count == 0) { return; }
 
+        int i = Room.RoomPlayers.FindIndex(p => p.isOwned);
+        if (i == -1 || i > _playerSlots.Length) { return; }
+
         _ipText.text = Room.networkAddress;
-        _playerSlots[Room.RoomPlayers.FindIndex(p => p.isOwned)]?.SetActive(true);
+        _playerSlots[i]?.SetActive(true);
     }
     private void UpdateDisplay()
     {
