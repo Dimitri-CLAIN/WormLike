@@ -581,7 +581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3973575573953257662, guid: b6487ece041804553a8bb34705f53a5c, type: 3}
       propertyPath: m_TagString
-      value: LandingPage
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 4476257577644107283, guid: b6487ece041804553a8bb34705f53a5c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
