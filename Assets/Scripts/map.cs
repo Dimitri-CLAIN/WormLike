@@ -12,7 +12,7 @@ public class js : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -23,6 +23,8 @@ public class js : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag != "Explosion")
+            return;
         if (stade == 0) {
             GetComponent<Renderer>().material = firstStade;
             stade++;
