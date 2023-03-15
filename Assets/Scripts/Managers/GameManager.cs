@@ -1,32 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
-using Random = System.Random;
-
-public class UserInputSettings
-{
-    public bool InputEnabled { get; set; } = false;
-    private Controls controls;
-    public Controls Controls
-    {
-        get
-        {
-            if (controls != null) return controls;
-            return controls = new Controls();
-        }
-        set => controls = value;
-    }
-
-    public UserInputSettings()
-    {
-        InputEnabled = false;
-        Controls.Disable();
-    }
-}
 
 public class GameManager : NetworkBehaviour 
 {
@@ -40,15 +15,16 @@ public class GameManager : NetworkBehaviour
     private int currentPlayerIndex = 0;
 
     public static GameManager instance;
-    public readonly Dictionary<Worm, UserInputSettings> inputSettings = new Dictionary<Worm, UserInputSettings>();
 
     private bool hasTurnEnded = false;
-    public UnityEvent onTurnEnded;
 
     private void Awake () => instance = this;
     
     #region Server
 
+    /// <summary>
+    /// Temporary a ContextMenu method to launch the game from the Unity Inspector
+    /// </summary>
     [ContextMenu("Launch Game")]
     [Server]
     public void LaunchGame()
@@ -56,6 +32,11 @@ public class GameManager : NetworkBehaviour
         StartCoroutine(RunGame());
     }
 
+    
+    /// <summary>
+    /// Determines if the game is finished or not
+    /// </summary>
+    /// <returns><c>True</c> if the game ends</returns>
     [Server]
     private bool ConditionForEndOfGameIsTrue()
     {
@@ -63,6 +44,11 @@ public class GameManager : NetworkBehaviour
         return false;
     }
 
+    
+    /// <summary>
+    /// Runs the game logic on the server and interaction between players
+    /// </summary>
+    /// <returns>IEnum</returns>
     [Server]
     public IEnumerator RunGame()
     {
@@ -76,113 +62,37 @@ public class GameManager : NetworkBehaviour
             {
                 if (ConditionForEndOfGameIsTrue())
                     yield break; // TODO end of game
-                // inputSettings[worm].Controls.Enable();
                 worm.StartTurn();
                 yield return new WaitForSeconds(turnTime);
-                // inputSettings[worm].Controls.Disable();
                 worm.EndTurn();
                 yield return new WaitForSeconds(intervalTime);
             }
-            
-            // game logic
-            
-            
             nbTurns--;
         }
     }
     
+    /// <summary>
+    /// Add a player to the list of player
+    /// </summary>
+    /// <param name="p">Player</param>
     [Server]
     public void AddPlayer(Worm p)
     {
-        if (false) // max nb players or party already running
+        if (false) // TODO max nb players or party already running
             Debug.Log("<color=red>" + "Cannot add a player" + "</color>");
         players.Add(p);
-        inputSettings[p] = new UserInputSettings();
     }
 
 
+    /// <summary>
+    /// Remove a player from the list of player
+    /// </summary>
+    /// <param name="p">Player</param>
     [Server]
     public void RemovePlayer(Worm p)
     {
-        if (inputSettings.ContainsKey(p))
-            inputSettings.Remove(p);
         players.Remove(p);
     }
     
     #endregion
 }
-/*
-#region Server
-    
-private void Awake()
-{
-    instance = this;
-    onTurnEnded.AddListener(() => hasTurnEnded = true);
-}
-
-[ContextMenu("Launch Game")]
-[ServerCallback]
-private void LaunchGame()
-{
-    StartCoroutine(HandleTurn());
-}
-
-
-[Server]
-private bool ConditionForEndOfGameIsTrue()
-{
-    // TODO
-    return false;
-}
-    
-[Server]
-private IEnumerator HandleTurn()
-{
-    while (true)
-    {
-        if (ConditionForEndOfGameIsTrue() == true)
-            yield break; // TODO notify end of game to all clients
-        PlayTurn();
-        yield return new WaitUntil(() => hasTurnEnded == true);
-        hasTurnEnded = false;
-        yield return new WaitForSeconds(intervalTime);
-        currentPlayerIndex++;
-        if (currentPlayerIndex >= players.Count)
-            currentPlayerIndex = 0;
-    }
-}
-
-[Server]
-private void PlayTurn()
-{
-    Worm currentPlayer = players[currentPlayerIndex];
-
-    if (currentPlayer.TryGetComponent(out NetworkIdentity netID))
-    {
-        currentPlayer.TargetPlayTurn(netID.connectionToClient, turnTime);
-    }
-}
-    
-[Server]
-public void AddPlayer(Worm p)
-{
-    if (false) // max nb players or party already running
-        Debug.Log("<color=red>" + "Cannot add a player" + "</color>");
-    p.playColor = UnityEngine.Random.ColorHSV();
-    players.Add(p);
-    inputSettings[p] = new UserInputSettings();
-    // p.OnTurnEnded += UpdateEndTurn;
-}
-
-
-[Server]
-public void RemovePlayer(Worm p)
-{
-    if (inputSettings.ContainsKey(p))
-        inputSettings.Remove(p);
-    players.Remove(p);
-}
-    
-#endregion
-
-*/

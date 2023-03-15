@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8243950569011989108}
   - component: {fileID: 2912335906408967834}
   - component: {fileID: 3560976584307125083}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Worm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,6 @@ MonoBehaviour:
   playColor: {r: 1, g: 0, b: 0, a: 1}
   meshRenderer: {fileID: 877890648784275579}
   playerController: {fileID: 3560976584307125083}
-  turnActive: 0
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
