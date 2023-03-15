@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3754037417146107246}
   - component: {fileID: 4575318528675215710}
   - component: {fileID: 8243950569011989108}
+  - component: {fileID: 2912335906408967834}
   - component: {fileID: 3560976584307125083}
   m_Layer: 0
   m_Name: Worm
@@ -183,6 +184,25 @@ MonoBehaviour:
   compressRotation: 0
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!114 &2912335906408967834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8457254207794613595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf4691a69f405094e8e3b8342295d12b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  playColor: {r: 1, g: 0, b: 0, a: 1}
+  meshRenderer: {fileID: 877890648784275579}
+  playerController: {fileID: 3560976584307125083}
+  turnActive: 0
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,4 +222,4 @@ MonoBehaviour:
   jumpForce: 4
   gravityMultiplier: 1
   controller: {fileID: 3754037417146107246}
-  distToGround: 0.225
+  player: {fileID: 2912335906408967834}

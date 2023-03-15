@@ -16,15 +16,21 @@ public class PlayerController : NetworkBehaviour
     [Range(1,10)]
     private float gravityMultiplier = 5f;
     private float velocity;
+    public bool isTurnActive { get; set; } = false;
 
 
     [SerializeField]
     private CharacterController controller = null;
+    [SerializeField]
+    private Worm player;
+    
+
     private Vector2 previousInput;
     private float previousMovement;
     private bool isJumpTriggered;
     private float feetYCoordinates;
 
+    private GameManager gameManager;
 
     private Controls controls;
     public Controls Controls
@@ -40,35 +46,43 @@ public class PlayerController : NetworkBehaviour
     {
         enabled = true;
         
-        controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
-        controls.Player.Move.canceled += ctx => ResetMovement();
-        controls.Player.Jump.performed += ctx => isJumpTriggered = true;
+        Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
+        Controls.Player.Move.canceled += ctx => ResetMovement();
+        Controls.Player.Jump.performed += ctx => isJumpTriggered = true; // only true if turn is active
+    }
+
+    public override void OnStartClient()
+    {
+        Controls.Player.Disable();
     }
 
 
-    [ClientCallback]
-    private void OnEnable()
-    {
-        Controls.Enable();
-    }
-    [ClientCallback]
-    private void OnDisable()
-    {
-        Controls.Disable();
-    }
+    // [ClientCallback]
+    // private void OnEnable()
+    // {
+    //     Controls.Enable();
+    // }
+    // [ClientCallback]
+    // private void OnDisable()
+    // {
+    //     Controls.Disable();
+    // }
 
     [ClientCallback]
     private void Update()
     {
         direction = new Vector3(previousMovement, 0);
-        // velocity.y = rb.velocity.y;
         ApplyGravity();
         Move();
+        ApplyMovement();
     }
 
     
     [Client]
-    private void SetMovement(float horizontal) => previousMovement = horizontal;
+    private void SetMovement(float horizontal)
+    {
+        previousMovement = horizontal;
+    }
     [Client]
     private void ResetMovement() => previousMovement = 0f;
     
@@ -84,6 +98,9 @@ public class PlayerController : NetworkBehaviour
         }
         direction.y = velocity;
     }
+
+    [Client]
+    private void ApplyMovement() => controller.Move(direction * (movementSpeed * Time.deltaTime));
     
     
     [Client]
@@ -97,7 +114,5 @@ public class PlayerController : NetworkBehaviour
             }
             isJumpTriggered = false;
         }
-
-        controller.Move(direction * (movementSpeed * Time.deltaTime));
     }
 }
