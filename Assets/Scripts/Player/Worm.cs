@@ -28,6 +28,22 @@ public class Worm : NetworkBehaviour
     #region Play
     [SerializeField]
     private PlayerController playerController;
+    private bool isTurnActive = false;
+    public bool IsTurnActive 
+    { get => isTurnActive; private set => isTurnActive = value; }
+    private Controls controls;
+    public Controls Controls
+    {
+        get
+        {
+            if (controls != null) return controls;
+            return controls = new Controls();
+        }
+    }
+    
+    public event Action OnTurnStarted;
+    public event Action OnTurnEnded;
+
     #endregion
 
     
@@ -39,8 +55,10 @@ public class Worm : NetworkBehaviour
     [Server]
     public void StartTurn()
     {
+        IsTurnActive = true;
         color = playColor;
-        TargetToggleControls(this.connectionToClient, true);        
+        TargetToggleControls(this.connectionToClient, true);
+        OnTurnStarted?.Invoke();
     }
     
 
@@ -50,14 +68,16 @@ public class Worm : NetworkBehaviour
     [Server]
     public void EndTurn()
     {
+        IsTurnActive = false;
         color = originalColor;
-        TargetToggleControls(this.connectionToClient, false);        
+        TargetToggleControls(this.connectionToClient, false);
+        OnTurnEnded?.Invoke();
     }
 
     
     
     #endregion
-    
+
     
     #region Client
 
@@ -82,9 +102,9 @@ public class Worm : NetworkBehaviour
     private void TargetToggleControls(NetworkConnection conn, bool toggle)
     {
         if (toggle)
-            playerController.Controls.Enable();
+            Controls.Enable();
         else
-            playerController.Controls.Disable();
+            Controls.Disable();
     }
     
     #endregion

@@ -32,28 +32,18 @@ public class PlayerController : NetworkBehaviour
 
     private GameManager gameManager;
 
-    private Controls controls;
-    public Controls Controls
-    {
-        get
-        {
-            if (controls != null) return controls;
-            return controls = new Controls();
-        }
-    }
-
     public override void OnStartAuthority()
     {
         enabled = true;
         
-        Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
-        Controls.Player.Move.canceled += ctx => ResetMovement();
-        Controls.Player.Jump.performed += ctx => isJumpTriggered = true; // only true if turn is active
+        player.Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
+        player.Controls.Player.Move.canceled += ctx => ResetMovement();
+        player.Controls.Player.Jump.performed += ctx => isJumpTriggered = true; // only true if turn is active
     }
 
     public override void OnStartClient()
     {
-        Controls.Player.Disable();
+        player.Controls.Player.Disable();
     }
 
 
@@ -73,7 +63,7 @@ public class PlayerController : NetworkBehaviour
     {
         direction = new Vector3(previousMovement, 0);
         ApplyGravity();
-        Move();
+        ApplyJump();
         ApplyMovement();
     }
 
@@ -104,7 +94,7 @@ public class PlayerController : NetworkBehaviour
     
     
     [Client]
-    private void Move()
+    private void ApplyJump()
     {
         if (isJumpTriggered == true)
         {
