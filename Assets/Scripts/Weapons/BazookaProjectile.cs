@@ -1,18 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class BazookaProjectile : MonoBehaviour
+public class BazookaProjectile : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Rigidbody rb;
+
+    [Server]
+    private void DestroySelf()
     {
-        
+        NetworkServer.Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    [ServerCallback]
+    private void OnTriggerEnter(Collider other)
     {
-        
+        // TODO explosion
+        DestroySelf();
     }
 }

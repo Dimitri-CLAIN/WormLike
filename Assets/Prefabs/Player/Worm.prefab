@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8514267947989693558}
-  - component: {fileID: 2612118280254209521}
   - component: {fileID: 5606814056054678182}
   m_Layer: 9
   m_Name: Weapon
@@ -33,23 +32,6 @@ Transform:
   m_Father: {fileID: 6970416663683750474}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2612118280254209521
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4638382604331239461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 347ea6efea7739c44b5436b6651b48d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aimSprite: {fileID: 5606814056054678182}
-  worm: {fileID: 2912335906408967834}
-  aimAngle: 0
-  shoulder: {fileID: 6970416663683750474}
-  sensitivity: 4.9
 --- !u!212 &5606814056054678182
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -151,6 +133,7 @@ GameObject:
   - component: {fileID: 8243950569011989108}
   - component: {fileID: 2912335906408967834}
   - component: {fileID: 3560976584307125083}
+  - component: {fileID: 5839483686137611349}
   m_Layer: 9
   m_Name: Worm
   m_TagString: Untagged
@@ -357,3 +340,25 @@ MonoBehaviour:
   gravityMultiplier: 1
   controller: {fileID: 3754037417146107246}
   player: {fileID: 2912335906408967834}
+--- !u!114 &5839483686137611349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8457254207794613595}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 347ea6efea7739c44b5436b6651b48d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  aimSprite: {fileID: 5606814056054678182}
+  shoulder: {fileID: 6970416663683750474}
+  crosshairTransform: {fileID: 8514267947989693558}
+  worm: {fileID: 2912335906408967834}
+  angleSetter: 0
+  sensitivity: 1
+  bazookaProjectilePrefab: {fileID: 5271905729884256243, guid: ef1eaab00d11fb145ab570188bc6ee8b, type: 3}
