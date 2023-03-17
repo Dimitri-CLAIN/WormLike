@@ -85,15 +85,24 @@ public class PlayerWeapon : NetworkBehaviour
 
     #region Client
 
+    /// <summary>
+    /// Set the angle setter to change the angle depending on the value from the Input Action
+    /// </summary>
+    /// <param name="value">from -0 to 1</param>
     [Client]
     private void SetAim(float value) => angleSetter = value * sensitivity;
     
     
+    /// <summary>
+    /// Set the angle setter to 0 to stop the angle's update
+    /// </summary>
     [Client]
     private void ResetAim() => angleSetter = 0f;
 
 
-
+    /// <summary>
+    /// Hide the crosshair as the player is moving
+    /// </summary>
     [Client]
     private void HolsterWeapon()
     {
@@ -101,10 +110,17 @@ public class PlayerWeapon : NetworkBehaviour
         ResetAim();
     }
 
+
+    /// <summary>
+    /// Display the crosshair, player's ready to shoot
+    /// </summary>
     [Client]
     private void DrawWeapon() => aimSprite.enabled = true;
 
 
+    /// <summary>
+    /// Start the shot
+    /// </summary>
     [Client]
     private void StartShot()
     {
@@ -112,6 +128,9 @@ public class PlayerWeapon : NetworkBehaviour
     }
 
 
+    /// <summary>
+    /// Release the shot
+    /// </summary>
     [Client]
     private void ReleaseShot()
     {
@@ -120,11 +139,14 @@ public class PlayerWeapon : NetworkBehaviour
         CmdFireBazooka(shotPower);
     }
     
-    
+
     [ClientCallback]
     private void Update() => ApplyAim();
 
 
+    /// <summary>
+    /// Update the angle if the angle setter has been changed in the frame
+    /// </summary>
     [Client]
     private void ApplyAim()
     {
@@ -137,28 +159,21 @@ public class PlayerWeapon : NetworkBehaviour
         
         crosshairTransform.RotateAround(shoulder.position, Vector3.forward, angleSetter);
     }
-
-
-    [ClientRpc]
-    private void RpcFireBazooka(float shotPower)
-    {
-        if (projectileBazookaInstance == null) return;
-
-        Vector3 vec = new Vector3(Mathf.Cos(Mathf.Deg2Rad * aimAngle), Mathf.Sin(Mathf.Deg2Rad * aimAngle), 0);
-        float power = Mathf.Lerp(20f, 1000f, shotPower);
-        projectileBazookaInstance.rb.AddForce(vec * power);
-    }
     
     #endregion
     
     #region Server
 
+    /// <summary>
+    /// Create the bazooka projectile and send the isntruction to the server
+    /// </summary>
+    /// <param name="shotPower">Normalized shot power</param>
     [Command]
     private void CmdFireBazooka(float shotPower)
     {
         projectileBazookaInstance = Instantiate(bazookaProjectilePrefab, crosshairTransform.position, crosshairTransform.rotation);
         NetworkServer.Spawn(projectileBazookaInstance.gameObject);
-        RpcFireBazooka(shotPower);
+        projectileBazookaInstance.RpcAddForce(aimAngle, shotPower);
     }
     
     #endregion
