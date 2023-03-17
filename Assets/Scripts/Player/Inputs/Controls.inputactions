@@ -33,13 +33,13 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Aim1",
-                    "type": "Value",
-                    "id": "91a896ef-264f-436d-8b22-2f24e037ccb5",
-                    "expectedControlType": "Axis",
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "c99d6eac-2ccb-401e-aebf-aa64cb823fa3",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -187,37 +187,15 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Vertical",
-                    "id": "aef17c7a-ee37-42d0-92d5-ca5e9cc854c4",
-                    "path": "1DAxis(whichSideWins=2)",
-                    "interactions": "Press",
+                    "name": "",
+                    "id": "c4881731-656d-4bd6-aa50-0c8eeb2773d7",
+                    "path": "<Keyboard>/x",
+                    "interactions": "Tap(duration=1)",
                     "processors": "",
-                    "groups": "",
-                    "action": "Aim1",
-                    "isComposite": true,
+                    "groups": "Keyboard & Mouse",
+                    "action": "Shoot",
+                    "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "1a1e7026-3547-4fd0-b7da-2d7159a037f1",
-                    "path": "<Keyboard>/p",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "Aim1",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "c0d7ea99-322f-4421-b81c-352d118ac985",
-                    "path": "<Keyboard>/semicolon",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard & Mouse",
-                    "action": "Aim1",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }
