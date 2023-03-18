@@ -152,6 +152,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   rb: {fileID: 4375829774240923804}
+  particles: {fileID: 198917022394846920, guid: 1d99f400487d4514fb17ded19c77b92a, type: 3}
 --- !u!54 &4375829774240923804
 Rigidbody:
   m_ObjectHideFlags: 0
