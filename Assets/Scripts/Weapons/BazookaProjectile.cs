@@ -16,7 +16,7 @@ public class BazookaProjectile : NetworkBehaviour
     /// <param name="angle">Angle</param>
     /// <param name="power">Normalized power</param>
     [ClientRpc]
-    public void RpcAddForce(float angle, float power)
+    public void RpcFireBazooka(float angle, float power)
     {
         Vector3 vec = new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), Mathf.Sin(Mathf.Deg2Rad * angle), 0);
         float p = Mathf.Lerp(20f, 1000f, power);

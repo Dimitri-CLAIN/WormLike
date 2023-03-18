@@ -600,7 +600,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  turnTime: 60
+  turnTime: 5
   intervalTime: 2
   players: []
 --- !u!114 &1509238405

@@ -47,17 +47,6 @@ public class PlayerController : NetworkBehaviour
     }
 
 
-    // [ClientCallback]
-    // private void OnEnable()
-    // {
-    //     Controls.Enable();
-    // }
-    // [ClientCallback]
-    // private void OnDisable()
-    // {
-    //     Controls.Disable();
-    // }
-
     [ClientCallback]
     private void Update()
     {

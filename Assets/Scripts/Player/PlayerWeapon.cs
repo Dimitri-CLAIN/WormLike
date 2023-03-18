@@ -136,7 +136,7 @@ public class PlayerWeapon : NetworkBehaviour
     {
         float shotPower = Time.time - startChrono;
         // TODO weapon selection
-        CmdFireBazooka(shotPower);
+        CmdFireBazooka(aimAngle, shotPower);
     }
     
 
@@ -165,15 +165,16 @@ public class PlayerWeapon : NetworkBehaviour
     #region Server
 
     /// <summary>
-    /// Create the bazooka projectile and send the isntruction to the server
+    /// Create the bazooka projectile and send the instruction to the server
     /// </summary>
+    /// <param name="angle">Angle of the shot</param>
     /// <param name="shotPower">Normalized shot power</param>
     [Command]
-    private void CmdFireBazooka(float shotPower)
+    private void CmdFireBazooka(float angle, float shotPower)
     {
         projectileBazookaInstance = Instantiate(bazookaProjectilePrefab, crosshairTransform.position, crosshairTransform.rotation);
         NetworkServer.Spawn(projectileBazookaInstance.gameObject);
-        projectileBazookaInstance.RpcAddForce(aimAngle, shotPower);
+        projectileBazookaInstance.RpcFireBazooka(angle, shotPower);
     }
     
     #endregion
