@@ -11,7 +11,6 @@ public class GameManager : NetworkBehaviour
     private float intervalTime = 2f;
     [SerializeField]
     private List<Worm> players = new List<Worm>();
-    public Dictionary<Worm, Controls> controlsList = new Dictionary<Worm, Controls>();
     
     private int currentPlayerIndex = 0;
 
@@ -82,7 +81,6 @@ public class GameManager : NetworkBehaviour
         if (false) // TODO max nb players or party already running
             Debug.Log("<color=red>" + "Cannot add a player" + "</color>");
         players.Add(p);
-        controlsList.Add(p, new Controls());
     }
 
 
@@ -93,8 +91,6 @@ public class GameManager : NetworkBehaviour
     [Server]
     public void RemovePlayer(Worm p)
     {
-        if (controlsList.ContainsKey(p))
-            controlsList.Remove(p);
         players.Remove(p);
     }
     

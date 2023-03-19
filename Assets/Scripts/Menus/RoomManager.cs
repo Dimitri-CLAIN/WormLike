@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
@@ -18,6 +20,8 @@ using Mirror;
 /// </summary>
 public class RoomManager : NetworkRoomManager
 {
+    public List<NetworkConnectionToClient> connections = new List<NetworkConnectionToClient>();
+    
     #region Server Callbacks
 
     /// <summary>
@@ -102,6 +106,20 @@ public class RoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
+        GameManager gameManager = GameManager.instance;
+        if (gameManager == null)
+        {
+            Debug.Log($"<color=red>Game Manager not instanciated</color>");
+            return false;
+        }
+        
+        Worm p = gamePlayer.GetComponent<Worm>();
+        if (gamePlayer == null || p == null)
+        {
+            Debug.Log($"<color=red>Worm component not found in current iteration ConnToClient</color>");
+            return false;
+        }
+        gameManager.AddPlayer(p);
         return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
     }
 
