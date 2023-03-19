@@ -160,7 +160,7 @@ public class PlayerWeapon : NetworkBehaviour
         crosshairTransform.RotateAround(shoulder.position, Vector3.forward, angleSetter);
     }
     
-    #endregion
+    #endregion  
     
     #region Server
 
@@ -174,7 +174,7 @@ public class PlayerWeapon : NetworkBehaviour
     {
         projectileBazookaInstance = Instantiate(bazookaProjectilePrefab, crosshairTransform.position, crosshairTransform.rotation);
         NetworkServer.Spawn(projectileBazookaInstance.gameObject);
-        projectileBazookaInstance.RpcFireBazooka(angle, shotPower);
+        projectileBazookaInstance.RpcFireWeapon(angle, shotPower);
     }
     
     #endregion
