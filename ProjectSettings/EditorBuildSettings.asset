@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menus/Lobby_Scene.unity
     guid: b3652a1ca008f4f5f92e5d85afed14f6
+  - enabled: 1
+    path: Assets/Scenes/WIP/Dimitri/Scene_Map_one.unity
+    guid: 7e220dffbc13e43728b43ced007905b2
   m_configObjects: {}

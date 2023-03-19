@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class NetworkManagerLobby : NetworkManager
 {
@@ -14,8 +15,6 @@ public class NetworkManagerLobby : NetworkManager
 
     [Header("Game")]
     [SerializeField] private NetworkGamePlayerLobby gamePlayerPrefab = null;
-    [SerializeField] private GameObject playerSpawnSystem = null;
-    [SerializeField] private GameObject roundSystem = null;
 
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
@@ -121,13 +120,12 @@ public class NetworkManagerLobby : NetworkManager
         {
             if (!IsReadyToStart()) { return; }
 
-            Debug.Log("Game Start");
+            ServerChangeScene("Scene_Map_one");
         }
     }
 
     public override void ServerChangeScene(string newSceneName)
     {
-        // From menu to game
         if (SceneManager.GetActiveScene().name == _lobbySceneName && newSceneName.StartsWith("Scene_Map"))
         {
             for (int i = RoomPlayers.Count - 1; i >= 0; i--)
@@ -135,6 +133,7 @@ public class NetworkManagerLobby : NetworkManager
                 var conn = RoomPlayers[i].connectionToClient;
                 var gameplayerInstance = Instantiate(gamePlayerPrefab);
                 gameplayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+                // set championne
 
                 NetworkServer.Destroy(conn.identity.gameObject);
 
@@ -147,13 +146,18 @@ public class NetworkManagerLobby : NetworkManager
 
     public override void OnServerSceneChanged(string sceneName)
     {
-        if (sceneName.StartsWith("Scene_Map"))
+        if (sceneName.StartsWith(_lobbySceneName))
         {
-            GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
-            NetworkServer.Spawn(playerSpawnSystemInstance);
-
-            GameObject roundSystemInstance = Instantiate(roundSystem);
-            NetworkServer.Spawn(roundSystemInstance);
+            Debug.Log("Go to lobby");
+            GamePlayers.ForEach(p => GameManager.instance.RemovePlayer(p.Worm));
+        } else if (sceneName.StartsWith("Scene_Map"))
+        {
+            Debug.Log("Go to map");
+            GamePlayers.ForEach(p =>
+            {
+                p.Worm.playColor = Random.ColorHSV();
+                GameManager.instance.AddPlayer(p.Worm);
+            });
         }
     }
 

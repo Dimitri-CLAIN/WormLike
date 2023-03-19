@@ -355,18 +355,16 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1289433885613618266, guid: 034ea3b75325545d4a89051f934edeb6, type: 3}
+  playerPrefab: {fileID: 4899532653130993268, guid: 80db8b54752bb44e0a7ed21ecca3e599, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 3022441366768747206, guid: 87c21f514e14147e79724efbb5891c91, type: 3}
   timeInterpolationGui: 0
   _minPlayers: 2
   _lobbySceneName: Lobby_Scene
   roomPlayerPrefab: {fileID: 7454315952752217872, guid: 87c21f514e14147e79724efbb5891c91, type: 3}
-  gamePlayerPrefab: {fileID: 0}
-  playerSpawnSystem: {fileID: 0}
-  roundSystem: {fileID: 0}
+  gamePlayerPrefab: {fileID: 1430549935981716119, guid: 80db8b54752bb44e0a7ed21ecca3e599, type: 3}
 --- !u!4 &599706503
 Transform:
   m_ObjectHideFlags: 0

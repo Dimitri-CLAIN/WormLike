@@ -1,9 +1,12 @@
 using Mirror;
+using UnityEngine;
 
 public class NetworkGamePlayerLobby : NetworkBehaviour
 {
     [SyncVar]
     private string _displayName = "Loading...";
+
+    [SerializeField] public Worm Worm = default;
 
     private NetworkManagerLobby _room;
     private NetworkManagerLobby Room
