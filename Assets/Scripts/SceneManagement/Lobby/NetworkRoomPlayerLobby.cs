@@ -53,7 +53,7 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     {
         _backGameButton.onClick.AddListener(() =>
             {
-                GameObject.Find("MainMenu")!.GetComponent<MainMenu>()!._landingPagePanel.SetActive(true);
+                // GameObject.Find("MainMenu")!.GetComponent<MainMenu>()!._landingPagePanel.SetActive(true);
                 if (_isLeader) { NetworkManager.singleton.StopHost(); }
                 else { NetworkManager.singleton.StopClient(); }
                 Destroy(this);

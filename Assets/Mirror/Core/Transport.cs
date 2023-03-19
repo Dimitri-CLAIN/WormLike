@@ -77,6 +77,8 @@ namespace Mirror
         /// <summary>Called by Transport when a client disconnected from the server.</summary>
         public Action<int> OnServerDisconnected;
 
+        public static object activeTransport;
+
         // client functions ////////////////////////////////////////////////////
         /// <summary>True if the client is currently connected to the server.</summary>
         public abstract bool ClientConnected();
