@@ -5,13 +5,18 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class PlayerWeapon : NetworkBehaviour
 {
     #region Gameobjects
     
     [SerializeField]
-    private SpriteRenderer aimSprite;
+    private Image aimImage;
+    [SerializeField]
+    private Image powerIndicator;
+    
+    
     [SerializeField]
     private Transform shoulder;
     [SerializeField]
@@ -32,6 +37,7 @@ public class PlayerWeapon : NetworkBehaviour
     
     #endregion
 
+    private bool isShotTriggered = false;
     private float startChrono = 0f;
 
     [SerializeField]
@@ -106,7 +112,7 @@ public class PlayerWeapon : NetworkBehaviour
     [Client]
     private void HolsterWeapon()
     {
-        aimSprite.enabled = false;
+        aimImage.enabled = powerIndicator.enabled = false;
         ResetAim();
     }
 
@@ -115,7 +121,7 @@ public class PlayerWeapon : NetworkBehaviour
     /// Display the crosshair, player's ready to shoot
     /// </summary>
     [Client]
-    private void DrawWeapon() => aimSprite.enabled = true;
+    private void DrawWeapon() => aimImage.enabled = true;
 
 
     /// <summary>
@@ -125,6 +131,8 @@ public class PlayerWeapon : NetworkBehaviour
     private void StartShot()
     {
         startChrono = Time.time;
+        isShotTriggered = true;
+        powerIndicator.enabled = true;
     }
 
 
@@ -135,13 +143,25 @@ public class PlayerWeapon : NetworkBehaviour
     private void ReleaseShot()
     {
         float shotPower = Time.time - startChrono;
-        // TODO weapon selection
         CmdFireBazooka(aimAngle, shotPower);
+        isShotTriggered = false;
     }
+
+
+    /// <summary>
+    /// Update the power indicator 
+    /// </summary>
+    [ClientCallback]
+    private void UpdatePowerIndicator() => powerIndicator.fillAmount = Time.time - startChrono;
     
 
     [ClientCallback]
-    private void Update() => ApplyAim();
+    private void Update()
+    {
+        ApplyAim();
+        if (isShotTriggered)
+            UpdatePowerIndicator();
+    }
 
 
     /// <summary>
