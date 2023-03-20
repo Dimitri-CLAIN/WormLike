@@ -4,10 +4,21 @@ using UnityEngine;
 
 public abstract class AWeapon : NetworkBehaviour
 {
+    #region Visual Objects
+
     [SerializeField]
     private Rigidbody rb;
     [SerializeField]
     private ParticleSystem particles;
+
+    #endregion
+
+    #region Weapon Statistics
+
+    public float blastRadius = 3f;
+    public int damage = 35;
+
+    #endregion
     
 
     #region Server
@@ -36,6 +47,17 @@ public abstract class AWeapon : NetworkBehaviour
         NetworkServer.Destroy(gameObject);
         ParticleSystem particle = Instantiate(particles, position, Quaternion.identity);//Instantiate(particles.gameObject, this.transform.position, particles.gameObject.transform.rotation);
         NetworkServer.Spawn(particle.gameObject);
+        
+        // Dmg logic
+        Collider[] hits = Physics.OverlapSphere(position, blastRadius);
+        foreach (var objectHit in hits)
+        {
+            Debug.Log($"<color=blue>Hit object is {objectHit.name}</color>");
+            if (objectHit.TryGetComponent<IDamageable>(out IDamageable target))
+            {
+                target.DealDamage(damage);
+            }
+        }
     }
 
     
