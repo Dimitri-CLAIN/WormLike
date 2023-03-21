@@ -740,7 +740,7 @@ MonoBehaviour:
   syncInterval: 0.1
   playColor: {r: 1, g: 0, b: 0, a: 1}
   meshRenderer: {fileID: 877890648784275579}
-  playerController: {fileID: 3560976584307125083}
+  controller: {fileID: 3560976584307125083}
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -756,11 +756,11 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  controller: {fileID: 3754037417146107246}
+  worm: {fileID: 2912335906408967834}
   movementSpeed: 5
   jumpForce: 4
   gravityMultiplier: 1
-  controller: {fileID: 3754037417146107246}
-  player: {fileID: 2912335906408967834}
 --- !u!114 &5839483686137611349
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -59,10 +59,10 @@ public class PlayerWeapon : NetworkBehaviour
     {
         enabled = true;
         
-        worm.Controls.Player.Move.performed += BindHolsterWeapon;
+        // worm.Controls.Player.Move.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.canceled += BindDrawWeapon;
-        worm.Controls.Player.Move.canceled += BindDrawWeapon;
+        // worm.Controls.Player.Move.canceled += BindDrawWeapon;
         worm.Controls.Player.Aim.performed += BindSetAim;
         worm.Controls.Player.Aim.canceled += BindResetAim;
         worm.Controls.Player.Shoot.started += BindStartShot;
@@ -94,9 +94,13 @@ public class PlayerWeapon : NetworkBehaviour
     /// <summary>
     /// Set the angle setter to change the angle depending on the value from the Input Action
     /// </summary>
-    /// <param name="value">from -0 to 1</param>
+    /// <param name="value">from -1 to 1</param>
     [Client]
-    private void SetAim(float value) => angleSetter = value * sensitivity;
+    private void SetAim(float value)
+    {
+        if (worm.Controller.IsGrounded() == false) return;
+        angleSetter = value * sensitivity;
+    }
     
     
     /// <summary>

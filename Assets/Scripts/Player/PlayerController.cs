@@ -2,9 +2,23 @@
 using System;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : NetworkBehaviour
 {
+    #region Game Objects
+
+    [Header("Game Objects references")]
+    [SerializeField]
+    private CharacterController controller = null;
+    [SerializeField]
+    private Worm worm;
+
+    #endregion
+
+    #region Movement Values
+
+    [Header("Movement Values")]
     [SerializeField]
     private float movementSpeed = 5f;
     [SerializeField]
@@ -16,34 +30,24 @@ public class PlayerController : NetworkBehaviour
     [Range(1,10)]
     private float gravityMultiplier = 5f;
     private float velocity;
-    public bool isTurnActive { get; set; } = false;
-
-
-    [SerializeField]
-    private CharacterController controller = null;
-    [SerializeField]
-    private Worm player;
-    
-
-    private Vector2 previousInput;
     private float previousMovement;
     private bool isJumpTriggered;
-    private float feetYCoordinates;
 
-    private GameManager gameManager;
+    #endregion
+
 
     public override void OnStartAuthority()
     {
         enabled = true;
         
-        player.Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
-        player.Controls.Player.Move.canceled += ctx => ResetMovement();
-        player.Controls.Player.Jump.performed += ctx => isJumpTriggered = true; // only true if turn is active
+        worm.Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
+        worm.Controls.Player.Move.canceled += ctx => ResetMovement();
+        worm.Controls.Player.Jump.performed += ctx => isJumpTriggered = true; // only true if turn is active
     }
 
     public override void OnStartClient()
     {
-        player.Controls.Player.Disable();
+        worm.Controls.Player.Disable();
     }
 
 
@@ -68,7 +72,7 @@ public class PlayerController : NetworkBehaviour
     [Client]
     private void ApplyGravity()
     {
-        if (controller.isGrounded && velocity < 0.0f)
+        if (IsGrounded() && velocity < 0.0f)
         {
             velocity = -1.0f;
         } else
@@ -94,4 +98,10 @@ public class PlayerController : NetworkBehaviour
             isJumpTriggered = false;
         }
     }
+
+    [Client]
+    public bool IsGrounded() => controller.isGrounded;
+    
+    [Client]
+    public bool IsMoving() => previousMovement != 0;
 }

@@ -26,8 +26,6 @@ public class Worm : NetworkBehaviour
     }
     
     #region Play
-    [SerializeField]
-    private PlayerController playerController;
     private bool isTurnActive = false;
     public bool IsTurnActive 
     { get => isTurnActive; private set => isTurnActive = value; }
@@ -40,6 +38,10 @@ public class Worm : NetworkBehaviour
             return controls = new Controls();
         }
     }
+    [SerializeField]
+    private PlayerController controller;
+    public PlayerController Controller
+    { get => controller; }
     
     public event Action OnTurnStarted;
     public event Action OnTurnEnded;
