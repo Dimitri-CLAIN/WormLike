@@ -62,7 +62,6 @@ public abstract class AWeapon : NetworkBehaviour
                 continue;
             hitsGameObjectsID.Add(objectHit.gameObject.GetInstanceID());
             
-            Debug.Log($"<color=blue>Hit object is {objectHit.name}</color>");
             if (objectHit.TryGetComponent<IDamageable>(out IDamageable target))
             {
                 target.DealDamage(damage);
