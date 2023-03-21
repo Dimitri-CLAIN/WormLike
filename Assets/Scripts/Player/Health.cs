@@ -61,7 +61,6 @@ public class Health : NetworkBehaviour
     {
         // TODO tween health lost
         health = newHealth;
-        Debug.Log($"<color=green>Handle health changed on player {name} : from {oldHealth} to {newHealth}</color>");
         if (healthbar == null) return;
 
         float normalizedValue = Mathf.InverseLerp(0, maxHealth, health);

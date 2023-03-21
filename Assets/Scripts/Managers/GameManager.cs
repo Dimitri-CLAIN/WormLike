@@ -12,11 +12,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField]
     private List<Worm> players = new List<Worm>();
     
-    private int currentPlayerIndex = 0;
-
     public static GameManager instance;
-
-    private bool hasTurnEnded = false;
 
     private void Awake () => instance = this;
     

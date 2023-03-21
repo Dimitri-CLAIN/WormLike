@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using UnityEngine;
 
@@ -50,8 +52,16 @@ public abstract class AWeapon : NetworkBehaviour
         
         // Dmg logic
         Collider[] hits = Physics.OverlapSphere(position, blastRadius);
-        foreach (var objectHit in hits)
+        List<int> hitsGameObjectsID = new List<int>();
+        for (int i = 0; i < hits.Length; i++)
         {
+            Collider objectHit = hits[i];
+            // if object has 2 colliders, it will figure twice in the OverlapSphere, this assure the Game Object
+            // is counted only once by storing its gameObject's Instance ID and check if it has already been passed on
+            if (hitsGameObjectsID.Contains(objectHit.gameObject.GetInstanceID()))
+                continue;
+            hitsGameObjectsID.Add(objectHit.gameObject.GetInstanceID());
+            
             Debug.Log($"<color=blue>Hit object is {objectHit.name}</color>");
             if (objectHit.TryGetComponent<IDamageable>(out IDamageable target))
             {
