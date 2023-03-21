@@ -55,6 +55,9 @@ public class PlayerWeapon : NetworkBehaviour
     
     #endregion
 
+    /// <summary>
+    /// Binds controls to the Client Player
+    /// </summary>
     public override void OnStartAuthority()
     {
         enabled = true;
@@ -143,10 +146,15 @@ public class PlayerWeapon : NetworkBehaviour
     [Client]
     private void ReleaseShot()
     {
+        // this check makes sure the ReleaseShot is only triggered when the shot is release. By Disabling the
+        // Shoot inputs below the action is performed twice causing the projectile to sometimes collides on itself 
+        if (isShotTriggered == false) return; 
+
         float shotPower = Time.time - startChrono;
         CmdFireBazooka(aimAngle, shotPower);
         isShotTriggered = false;
         worm.Controls.Player.Move.Enable();
+        worm.Controls.Player.Shoot.Disable();
     }
 
 
