@@ -9,10 +9,10 @@ public class Health : NetworkBehaviour
 {
     [Header("Settings")]
     [SerializeField]
-    private int maxHealth = 100;
+    protected int maxHealth = 100;
     [SerializeField]
     [SyncVar(hook = nameof(HandleHealthChange))]
-    private int health;
+    protected int health;
 
     public event Action OnDeath;
 
@@ -32,24 +32,29 @@ public class Health : NetworkBehaviour
         health = maxHealth;
     }
 
-    
+
+    /// <summary>
+    /// Add value of health to the map component
+    /// </summary>
+    /// <param name="value">Amount of health added</param>
     [ServerCallback]
-    public void Add(int value)
+    public virtual void Add(int value)
     {
         if (value > 0)
             health = Mathf.Min(health + value, maxHealth);
     }
 
 
+    /// <summary>
+    /// Subtract value of health to the map component
+    /// </summary>
+    /// <param name="value">Amount of health subtracted</param>
     [ServerCallback]
-    public void Remove(int value)
+    public virtual void Remove(int value)
     {
         if (value <= 0) return;
         
         health -= value;
-        if (health <= 0)
-            OnDeath?.Invoke();
-        
     }
 
     #endregion
@@ -57,14 +62,21 @@ public class Health : NetworkBehaviour
     #region Client
 
     [Client]
-    private void HandleHealthChange(int oldHealth, int newHealth)
+    protected virtual void HandleHealthChange(int oldHealth, int newHealth)
     {
         // TODO tween health lost
         health = newHealth;
-        if (healthbar == null) return;
 
-        float normalizedValue = Mathf.InverseLerp(0, maxHealth, health);
-        healthbar.fillAmount = normalizedValue;
+        if (health <= 0)
+        {
+            OnDeath?.Invoke();
+            NetworkServer.Destroy(this.gameObject);
+        }
+        if (healthbar != null)
+        {
+            float normalizedValue = Mathf.InverseLerp(0, maxHealth, health);
+            healthbar.fillAmount = normalizedValue;
+        }
     }
 
 #endregion
