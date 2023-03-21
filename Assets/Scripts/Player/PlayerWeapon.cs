@@ -59,10 +59,8 @@ public class PlayerWeapon : NetworkBehaviour
     {
         enabled = true;
         
-        // worm.Controls.Player.Move.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.canceled += BindDrawWeapon;
-        // worm.Controls.Player.Move.canceled += BindDrawWeapon;
         worm.Controls.Player.Aim.performed += BindSetAim;
         worm.Controls.Player.Aim.canceled += BindResetAim;
         worm.Controls.Player.Shoot.started += BindStartShot;
@@ -74,10 +72,8 @@ public class PlayerWeapon : NetworkBehaviour
 
     public override void OnStopAuthority()
     {
-        worm.Controls.Player.Move.performed -= BindHolsterWeapon;
         worm.Controls.Player.Jump.performed -= BindHolsterWeapon;
         worm.Controls.Player.Jump.canceled -= BindDrawWeapon;
-        worm.Controls.Player.Move.canceled -= BindDrawWeapon;
         worm.Controls.Player.Aim.performed -= BindSetAim;
         worm.Controls.Player.Aim.canceled -= BindResetAim;
         worm.Controls.Player.Shoot.started -= BindStartShot;
@@ -137,6 +133,7 @@ public class PlayerWeapon : NetworkBehaviour
         startChrono = Time.time;
         isShotTriggered = true;
         powerIndicator.enabled = true;
+        worm.Controls.Player.Move.Disable();
     }
 
 
@@ -149,6 +146,7 @@ public class PlayerWeapon : NetworkBehaviour
         float shotPower = Time.time - startChrono;
         CmdFireBazooka(aimAngle, shotPower);
         isShotTriggered = false;
+        worm.Controls.Player.Move.Enable();
     }
 
 

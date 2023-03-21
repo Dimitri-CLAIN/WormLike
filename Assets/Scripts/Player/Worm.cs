@@ -38,10 +38,15 @@ public class Worm : NetworkBehaviour
             return controls = new Controls();
         }
     }
+
     [SerializeField]
     private PlayerController controller;
     public PlayerController Controller
     { get => controller; }
+    [SerializeField]
+    private PlayerWeapon weapon;
+    public PlayerWeapon Weapon
+    { get => weapon; }
     
     public event Action OnTurnStarted;
     public event Action OnTurnEnded;

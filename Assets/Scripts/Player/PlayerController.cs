@@ -66,6 +66,7 @@ public class PlayerController : NetworkBehaviour
     {
         previousMovement = horizontal;
     }
+
     [Client]
     private void ResetMovement() => previousMovement = 0f;
     
@@ -101,7 +102,4 @@ public class PlayerController : NetworkBehaviour
 
     [Client]
     public bool IsGrounded() => controller.isGrounded;
-    
-    [Client]
-    public bool IsMoving() => previousMovement != 0;
 }

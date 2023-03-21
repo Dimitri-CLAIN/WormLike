@@ -741,6 +741,7 @@ MonoBehaviour:
   playColor: {r: 1, g: 0, b: 0, a: 1}
   meshRenderer: {fileID: 877890648784275579}
   controller: {fileID: 3560976584307125083}
+  weapon: {fileID: 5839483686137611349}
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
