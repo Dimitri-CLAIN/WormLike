@@ -9,8 +9,6 @@ public class GameManagerCustomEditor : Editor
     {
         base.OnInspectorGUI();
         
-        DrawDefaultInspector();
-        
         GUILayout.Space(20);
 
         if (GUILayout.Button("Launch Game"))
