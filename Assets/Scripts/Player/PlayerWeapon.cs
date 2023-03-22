@@ -5,13 +5,18 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class PlayerWeapon : NetworkBehaviour
 {
     #region Gameobjects
     
     [SerializeField]
-    private SpriteRenderer aimSprite;
+    private Image aimImage;
+    [SerializeField]
+    private Image powerIndicator;
+    
+    
     [SerializeField]
     private Transform shoulder;
     [SerializeField]
@@ -32,6 +37,7 @@ public class PlayerWeapon : NetworkBehaviour
     
     #endregion
 
+    private bool isShotTriggered = false;
     private float startChrono = 0f;
 
     [SerializeField]
@@ -49,14 +55,15 @@ public class PlayerWeapon : NetworkBehaviour
     
     #endregion
 
+    /// <summary>
+    /// Binds controls to the Client Player
+    /// </summary>
     public override void OnStartAuthority()
     {
         enabled = true;
         
-        worm.Controls.Player.Move.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.canceled += BindDrawWeapon;
-        worm.Controls.Player.Move.canceled += BindDrawWeapon;
         worm.Controls.Player.Aim.performed += BindSetAim;
         worm.Controls.Player.Aim.canceled += BindResetAim;
         worm.Controls.Player.Shoot.started += BindStartShot;
@@ -68,10 +75,8 @@ public class PlayerWeapon : NetworkBehaviour
 
     public override void OnStopAuthority()
     {
-        worm.Controls.Player.Move.performed -= BindHolsterWeapon;
         worm.Controls.Player.Jump.performed -= BindHolsterWeapon;
         worm.Controls.Player.Jump.canceled -= BindDrawWeapon;
-        worm.Controls.Player.Move.canceled -= BindDrawWeapon;
         worm.Controls.Player.Aim.performed -= BindSetAim;
         worm.Controls.Player.Aim.canceled -= BindResetAim;
         worm.Controls.Player.Shoot.started -= BindStartShot;
@@ -88,9 +93,13 @@ public class PlayerWeapon : NetworkBehaviour
     /// <summary>
     /// Set the angle setter to change the angle depending on the value from the Input Action
     /// </summary>
-    /// <param name="value">from -0 to 1</param>
+    /// <param name="value">from -1 to 1</param>
     [Client]
-    private void SetAim(float value) => angleSetter = value * sensitivity;
+    private void SetAim(float value)
+    {
+        if (worm.Controller.IsGrounded() == false) return;
+        angleSetter = value * sensitivity;
+    }
     
     
     /// <summary>
@@ -106,7 +115,7 @@ public class PlayerWeapon : NetworkBehaviour
     [Client]
     private void HolsterWeapon()
     {
-        aimSprite.enabled = false;
+        aimImage.enabled = powerIndicator.enabled = false;
         ResetAim();
     }
 
@@ -115,7 +124,7 @@ public class PlayerWeapon : NetworkBehaviour
     /// Display the crosshair, player's ready to shoot
     /// </summary>
     [Client]
-    private void DrawWeapon() => aimSprite.enabled = true;
+    private void DrawWeapon() => aimImage.enabled = true;
 
 
     /// <summary>
@@ -125,6 +134,9 @@ public class PlayerWeapon : NetworkBehaviour
     private void StartShot()
     {
         startChrono = Time.time;
+        isShotTriggered = true;
+        powerIndicator.enabled = true;
+        worm.Controls.Player.Move.Disable();
     }
 
 
@@ -134,14 +146,32 @@ public class PlayerWeapon : NetworkBehaviour
     [Client]
     private void ReleaseShot()
     {
+        // this check makes sure the ReleaseShot is only triggered when the shot is release. By Disabling the
+        // Shoot inputs below the action is performed twice causing the projectile to sometimes collides on itself 
+        if (isShotTriggered == false) return; 
+
         float shotPower = Time.time - startChrono;
-        // TODO weapon selection
         CmdFireBazooka(aimAngle, shotPower);
+        isShotTriggered = false;
+        worm.Controls.Player.Move.Enable();
+        worm.Controls.Player.Shoot.Disable();
     }
+
+
+    /// <summary>
+    /// Update the power indicator 
+    /// </summary>
+    [ClientCallback]
+    private void UpdatePowerIndicator() => powerIndicator.fillAmount = Time.time - startChrono;
     
 
     [ClientCallback]
-    private void Update() => ApplyAim();
+    private void Update()
+    {
+        ApplyAim();
+        if (isShotTriggered)
+            UpdatePowerIndicator();
+    }
 
 
     /// <summary>
