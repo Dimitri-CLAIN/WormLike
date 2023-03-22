@@ -5,8 +5,14 @@ using UnityEngine.UI;
 
 public class LobbyHUD : NetworkBehaviour
 {
+    public static LobbyHUD instance;
     public Button buttonStop;
     
+    [SerializeField]
+    private LayoutGroup layoutSlots;
+
+    public LayoutGroup LayoutSlots => layoutSlots;
+
     [SerializeField] private TMP_Text _ipText = default;
     [SerializeField] private GameObject[] _playerSlots = new GameObject[4];
     [SerializeField] private TMP_Text[] _playerNameTexts = new TMP_Text[4];
@@ -22,6 +28,8 @@ public class LobbyHUD : NetworkBehaviour
     [Header("Listen")]
     [SerializeField] private StringEventChannelSO onNameChanged;
     
+    
+    private void Awake() => instance = this;
     public void ButtonStop()
     {
         if (NetworkServer.active && NetworkClient.isConnected)

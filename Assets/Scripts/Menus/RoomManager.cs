@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
@@ -70,7 +71,13 @@ public class RoomManager : NetworkRoomManager
     /// <returns>The new room-player object.</returns>
     public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
     {
-        return base.OnRoomServerCreateRoomPlayer(conn);
+
+        LobbyHUD lobby = LobbyHUD.instance;
+        if (lobby == null) return null;
+        
+        return Instantiate(roomPlayerPrefab.gameObject, lobby.LayoutSlots.transform);
+        
+        // return base.OnRoomServerCreateRoomPlayer(conn);
     }
 
     /// <summary>
@@ -145,7 +152,17 @@ public class RoomManager : NetworkRoomManager
     /// <summary>
     /// This is a hook to allow custom behaviour when the game client enters the room.
     /// </summary>
-    public override void OnRoomClientEnter() { }
+    public override void OnRoomClientEnter()
+    {
+        LobbyHUD lobby = LobbyHUD.instance;
+        if (lobby == null) return;
+
+        foreach (NetworkRoomPlayer roomPlayer in roomSlots)
+        {
+            roomPlayer.transform.SetParent(lobby.LayoutSlots.transform);
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(lobby.GetComponent<RectTransform>());
+    }
 
     /// <summary>
     /// This is a hook to allow custom behaviour when the game client exits the room.
