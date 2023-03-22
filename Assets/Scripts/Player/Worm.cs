@@ -41,13 +41,16 @@ public class Worm : NetworkBehaviour
 
     [SerializeField]
     private PlayerController controller;
-    public PlayerController Controller
-    { get => controller; }
+    public PlayerController Controller => controller;
     [SerializeField]
     private PlayerWeapon weapon;
-    public PlayerWeapon Weapon
-    { get => weapon; }
-    
+    public PlayerWeapon Weapon => weapon;
+
+    [SerializeField]
+    private PlayerCanvas canvas;
+    public PlayerCanvas Canvas => canvas;
+
+
     public event Action OnTurnStarted;
     public event Action OnTurnEnded;
 
@@ -60,12 +63,13 @@ public class Worm : NetworkBehaviour
     /// Start the turn of the player client-wise
     /// </summary>
     [Server]
-    public void StartTurn()
+    public void StartTurn(int time)
     {
         IsTurnActive = true;
         color = playColor;
         TargetToggleControls(this.connectionToClient, true);
         OnTurnStarted?.Invoke();
+        canvas.TargetEnableTurnHUD(this.connectionToClient, time);
     }
     
 
@@ -79,6 +83,7 @@ public class Worm : NetworkBehaviour
         color = originalColor;
         TargetToggleControls(this.connectionToClient, false);
         OnTurnEnded?.Invoke();
+        canvas.TargetDisableTurnHUD(this.connectionToClient);
     }
 
     

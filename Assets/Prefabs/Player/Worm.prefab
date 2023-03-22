@@ -121,7 +121,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2819453957176629099}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2509724120503517725}
+        m_TargetAssemblyTypeName: PlayerCanvas, Assembly-CSharp
+        m_MethodName: EndTurnButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &488907402072492003
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,6 +926,7 @@ MonoBehaviour:
   meshRenderer: {fileID: 877890648784275579}
   controller: {fileID: 3560976584307125083}
   weapon: {fileID: 5839483686137611349}
+  canvas: {fileID: 2509724120503517725}
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,9 +967,9 @@ MonoBehaviour:
   shoulder: {fileID: 7098317565895259521}
   crosshairTransform: {fileID: 8123250385131432403}
   worm: {fileID: 2912335906408967834}
+  bazookaProjectilePrefab: {fileID: 5271905729884256243, guid: ef1eaab00d11fb145ab570188bc6ee8b, type: 3}
   angleSetter: 0
   sensitivity: 1
-  bazookaProjectilePrefab: {fileID: 5271905729884256243, guid: ef1eaab00d11fb145ab570188bc6ee8b, type: 3}
 --- !u!114 &7190902718148815006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,7 +985,7 @@ MonoBehaviour:
   syncDirection: 1
   syncMode: 0
   syncInterval: 0
-  target: {fileID: 2484928464665239685}
+  target: {fileID: 8123250385131432403}
   clientAuthority: 0
   syncPosition: 1
   syncRotation: 1
@@ -1032,6 +1045,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  worm: {fileID: 2912335906408967834}
   canvas: {fileID: 3076965826777871977}
   turnDisplay: {fileID: 600765408911059214}
   chrono: {fileID: 8045956349926170440}

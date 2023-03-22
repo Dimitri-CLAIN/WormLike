@@ -24,6 +24,8 @@ public class PlayerWeapon : NetworkBehaviour
     [SerializeField]
     private Worm worm;
     private BazookaProjectile projectileBazookaInstance = null;
+    [SerializeField]
+    private BazookaProjectile bazookaProjectilePrefab;
     #endregion
 
     #region ShotAngle
@@ -40,9 +42,7 @@ public class PlayerWeapon : NetworkBehaviour
     private bool isShotTriggered = false;
     private float startChrono = 0f;
 
-    [SerializeField]
-    private BazookaProjectile bazookaProjectilePrefab;
-    
+    public event Action OnShotTriggered;    
     
     #region BindControls
     
@@ -155,6 +155,7 @@ public class PlayerWeapon : NetworkBehaviour
         isShotTriggered = false;
         worm.Controls.Player.Move.Enable();
         worm.Controls.Player.Shoot.Disable();
+        OnShotTriggered?.Invoke();
     }
 
 
