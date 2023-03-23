@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 5315157680529728088}
   - component: {fileID: 5876540057648650989}
   m_Layer: 0
-  m_Name: PlayerRoomHUD
+  m_Name: PlayerRoomHUD.OLD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

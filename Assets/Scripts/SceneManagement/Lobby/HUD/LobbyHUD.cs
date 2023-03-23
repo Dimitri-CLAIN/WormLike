@@ -52,13 +52,13 @@ public class LobbyHUD : NetworkBehaviour
         }
     }
 
-    private RoomManager room;
-    private RoomManager Room
+    private WormRoomManager room;
+    private WormRoomManager Room
     {
         get
         {
             if (room != null) { return room; }
-            return room = RoomManager.singleton as RoomManager;
+            return room = WormRoomManager.singleton as WormRoomManager;
         }
     }
 

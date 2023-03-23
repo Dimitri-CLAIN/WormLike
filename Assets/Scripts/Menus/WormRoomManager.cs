@@ -19,7 +19,7 @@ using UnityEngine.UI;
 /// It requires that the NetworkRoomPlayer component be on the room player objects.
 /// NetworkRoomManager is derived from NetworkManager, and so it implements many of the virtual functions provided by the NetworkManager class.
 /// </summary>
-public class RoomManager : NetworkRoomManager
+public class WormRoomManager : NetworkRoomManager
 {
     public List<NetworkConnectionToClient> connections = new List<NetworkConnectionToClient>();
     
@@ -71,13 +71,17 @@ public class RoomManager : NetworkRoomManager
     /// <returns>The new room-player object.</returns>
     public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
     {
+        GameObject roomPlayerInstance = Instantiate(roomPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity); 
 
         LobbyHUD lobby = LobbyHUD.instance;
-        if (lobby == null) return null;
+        if (lobby == null) return roomPlayerInstance;
+        WormRoomPlayer wormRoomPlayer = roomPlayerInstance.GetComponent<WormRoomPlayer>();
+        if (wormRoomPlayer == null || wormRoomPlayer.roomPlayerHUDPrefab == null) return roomPlayerInstance;
         
-        return Instantiate(roomPlayerPrefab.gameObject, lobby.LayoutSlots.transform);
+        GameObject roomPlayerHUD = Instantiate(wormRoomPlayer.roomPlayerHUDPrefab.gameObject, lobby.LayoutSlots.transform);
+        wormRoomPlayer.hudInstance = roomPlayerHUD.GetComponent<RoomPlayerHUD>();
         
-        // return base.OnRoomServerCreateRoomPlayer(conn);
+        return wormRoomPlayer.gameObject;
     }
 
     /// <summary>
@@ -157,9 +161,16 @@ public class RoomManager : NetworkRoomManager
         LobbyHUD lobby = LobbyHUD.instance;
         if (lobby == null) return;
 
-        foreach (NetworkRoomPlayer roomPlayer in roomSlots)
+        foreach (NetworkRoomPlayer networkRoomPlayer in roomSlots)
         {
-            roomPlayer.transform.SetParent(lobby.LayoutSlots.transform);
+            // roomPlayer.transform.SetParent(lobby.LayoutSlots.transform);
+            WormRoomPlayer rp = networkRoomPlayer as WormRoomPlayer;
+            if (rp == null) return;
+            if (rp.hudInstance == null)
+            {
+                rp.hudInstance = Instantiate(rp.roomPlayerHUDPrefab, lobby.LayoutSlots.transform).GetComponent<RoomPlayerHUD>();
+            } else
+                rp.hudInstance.transform.SetParent(lobby.LayoutSlots.transform);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(lobby.GetComponent<RectTransform>());
     }

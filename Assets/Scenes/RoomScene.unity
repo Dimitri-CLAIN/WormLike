@@ -131,6 +131,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1818563111592544666, guid: 35620813a16954f6f906f403d516b07f, type: 3}
+      propertyPath: m_ChildScaleWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818563111592544666, guid: 35620813a16954f6f906f403d516b07f, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818563111592544666, guid: 35620813a16954f6f906f403d516b07f, type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818563111592544666, guid: 35620813a16954f6f906f403d516b07f, type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1818563111592544666, guid: 35620813a16954f6f906f403d516b07f, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3235685318900410527, guid: 35620813a16954f6f906f403d516b07f, type: 3}
       propertyPath: m_Name
       value: Lobby
