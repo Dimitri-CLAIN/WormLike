@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -179,7 +179,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7543602789545349975, guid: b6487ece041804553a8bb34705f53a5c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -392,7 +393,7 @@ MonoBehaviour:
   - {fileID: 7441616795867335240, guid: ef1eaab00d11fb145ab570188bc6ee8b, type: 3}
   - {fileID: 1121192042590650, guid: 1d99f400487d4514fb17ded19c77b92a, type: 3}
   timeInterpolationGui: 0
-  showRoomGUI: 1
+  showRoomGUI: 0
   minPlayers: 2
   roomPlayerPrefab: {fileID: 6240290501588938357, guid: 589d63bc213a27d45909aa09b88674af, type: 3}
   RoomScene: Assets/Scenes/RoomScene.unity

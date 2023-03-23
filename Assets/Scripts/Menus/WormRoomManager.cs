@@ -80,7 +80,9 @@ public class WormRoomManager : NetworkRoomManager
         
         GameObject roomPlayerHUD = Instantiate(wormRoomPlayer.roomPlayerHUDPrefab.gameObject, lobby.LayoutSlots.transform);
         wormRoomPlayer.hudInstance = roomPlayerHUD.GetComponent<RoomPlayerHUD>();
-        
+
+
+
         return wormRoomPlayer.gameObject;
     }
 
@@ -193,7 +195,10 @@ public class WormRoomManager : NetworkRoomManager
     /// <summary>
     /// This is called on the client when a client is started.
     /// </summary>
-    public override void OnRoomStartClient() { }
+    public override void OnRoomStartClient()
+    {
+        LobbyHUD.instance.ipText.text = networkAddress;
+    }
 
     /// <summary>
     /// This is called on the client when the client stops.

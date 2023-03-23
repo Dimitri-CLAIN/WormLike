@@ -9,7 +9,7 @@ public class PlayerNameInput : NetworkBehaviour
     [Header("UI")]
     [SerializeField] private TMP_InputField nameInputField = default;
     [SerializeField] private Button continueButton = default;
-    
+
     [Header("Channel")]
     [SerializeField] private StringEventChannelSO onNameChanged;
 
@@ -34,11 +34,13 @@ public class PlayerNameInput : NetworkBehaviour
 
     public void SetPlayerName(string name)
     {
+        if (!isLocalPlayer) { return; }
         continueButton.interactable = !string.IsNullOrEmpty(name);
     }
 
     public void CmdSavePlayerName()
     {
+        if (!isLocalPlayer) { return; }
         DisplayName = nameInputField.text;
 
         PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);

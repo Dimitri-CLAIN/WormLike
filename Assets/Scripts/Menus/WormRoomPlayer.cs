@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using TMPro;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-player
@@ -17,7 +18,7 @@ public class WormRoomPlayer : NetworkRoomPlayer
     public RoomPlayerHUD roomPlayerHUDPrefab;
     [HideInInspector]
     public RoomPlayerHUD hudInstance;
-    
+
     #region Start & Stop Callbacks
 
     /// <summary>
@@ -56,7 +57,15 @@ public class WormRoomPlayer : NetworkRoomPlayer
     /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
     /// <para>When <see cref="NetworkIdentity.AssignClientAuthority"/> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnectionToClient parameter included, this will be called on the client that owns the object.</para>
     /// </summary>
-    public override void OnStartAuthority() { }
+    public override void OnStartAuthority()
+    {
+        LobbyHUD.instance.readyGameButton.onClick.AddListener(delegate { CmdChangeReadyState(!readyToBegin); });
+
+        if (isLocalPlayer)
+        {
+            hudInstance.editButtons.gameObject.SetActive(true);
+        }
+    }
 
     /// <summary>
     /// This is invoked on behaviours when authority is removed.
@@ -96,7 +105,10 @@ public class WormRoomPlayer : NetworkRoomPlayer
     /// </summary>
     /// <param name="oldReadyState">The old readyState value</param>
     /// <param name="newReadyState">The new readyState value</param>
-    public override void ReadyStateChanged(bool oldReadyState, bool newReadyState) { }
+    public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+    {
+        hudInstance.OnReadyChange(oldReadyState, newReadyState);
+    }
 
     #endregion
 
