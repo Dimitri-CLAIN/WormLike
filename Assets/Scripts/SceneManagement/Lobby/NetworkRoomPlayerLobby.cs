@@ -9,7 +9,7 @@ public class NetworkRoomPlayerLobby : NetworkBehaviour
     [Header("UI")]
     [SerializeField] private GameObject _lobbyUI = null;
 
-    [SerializeField] private TMP_Text _ipText = default; 
+    [SerializeField] private TMP_Text _ipText = default;
     [SerializeField] private GameObject[] _playerSlots = new GameObject[4];
     [SerializeField] private TMP_Text[] _playerNameTexts = new TMP_Text[4];
     [SerializeField] private TMP_Text[] _playerReadyTexts = new TMP_Text[4];

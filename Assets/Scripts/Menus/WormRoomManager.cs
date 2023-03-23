@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
@@ -18,7 +19,7 @@ using UnityEngine.SceneManagement;
 /// It requires that the NetworkRoomPlayer component be on the room player objects.
 /// NetworkRoomManager is derived from NetworkManager, and so it implements many of the virtual functions provided by the NetworkManager class.
 /// </summary>
-public class RoomManager : NetworkRoomManager
+public class WormRoomManager : NetworkRoomManager
 {
     public List<NetworkConnectionToClient> connections = new List<NetworkConnectionToClient>();
     
@@ -70,7 +71,17 @@ public class RoomManager : NetworkRoomManager
     /// <returns>The new room-player object.</returns>
     public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
     {
-        return base.OnRoomServerCreateRoomPlayer(conn);
+        GameObject roomPlayerInstance = Instantiate(roomPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity); 
+
+        LobbyHUD lobby = LobbyHUD.instance;
+        if (lobby == null) return roomPlayerInstance;
+        WormRoomPlayer wormRoomPlayer = roomPlayerInstance.GetComponent<WormRoomPlayer>();
+        if (wormRoomPlayer == null || wormRoomPlayer.roomPlayerHUDPrefab == null) return roomPlayerInstance;
+        
+        GameObject roomPlayerHUD = Instantiate(wormRoomPlayer.roomPlayerHUDPrefab.gameObject, lobby.LayoutSlots.transform);
+        wormRoomPlayer.hudInstance = roomPlayerHUD.GetComponent<RoomPlayerHUD>();
+        
+        return wormRoomPlayer.gameObject;
     }
 
     /// <summary>
@@ -145,7 +156,24 @@ public class RoomManager : NetworkRoomManager
     /// <summary>
     /// This is a hook to allow custom behaviour when the game client enters the room.
     /// </summary>
-    public override void OnRoomClientEnter() { }
+    public override void OnRoomClientEnter()
+    {
+        LobbyHUD lobby = LobbyHUD.instance;
+        if (lobby == null) return;
+
+        foreach (NetworkRoomPlayer networkRoomPlayer in roomSlots)
+        {
+            // roomPlayer.transform.SetParent(lobby.LayoutSlots.transform);
+            WormRoomPlayer rp = networkRoomPlayer as WormRoomPlayer;
+            if (rp == null) return;
+            if (rp.hudInstance == null)
+            {
+                rp.hudInstance = Instantiate(rp.roomPlayerHUDPrefab, lobby.LayoutSlots.transform).GetComponent<RoomPlayerHUD>();
+            } else
+                rp.hudInstance.transform.SetParent(lobby.LayoutSlots.transform);
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(lobby.GetComponent<RectTransform>());
+    }
 
     /// <summary>
     /// This is a hook to allow custom behaviour when the game client exits the room.

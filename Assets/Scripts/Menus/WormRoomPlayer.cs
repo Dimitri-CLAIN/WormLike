@@ -12,8 +12,12 @@ using Mirror;
 /// This component holds basic room player data required for the room to function.
 /// Game specific data for room players can be put in other components on the RoomPrefab or in scripts derived from NetworkRoomPlayer.
 /// </summary>
-public class RoomPlayer : NetworkRoomPlayer
+public class WormRoomPlayer : NetworkRoomPlayer
 {
+    public RoomPlayerHUD roomPlayerHUDPrefab;
+    [HideInInspector]
+    public RoomPlayerHUD hudInstance;
+    
     #region Start & Stop Callbacks
 
     /// <summary>
@@ -76,7 +80,7 @@ public class RoomPlayer : NetworkRoomPlayer
     public override void OnClientExitRoom() { }
 
     #endregion
-
+    
     #region SyncVar Hooks
 
     /// <summary>
