@@ -1,9 +1,6 @@
-using System;
 using Mirror;
-using Mirror.Examples.Chat;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RoomPlayerHUD: NetworkBehaviour
 {
@@ -15,6 +12,10 @@ public class RoomPlayerHUD: NetworkBehaviour
     [Header("Utils")]
     [SyncVar(hook = nameof(OnDisplayNameChanged))]
     public string DisplayName = "Waiting...";
+    [SyncVar(hook = nameof(OnChangeChampion))]
+    private int _championIndex;
+
+    [SerializeField] public GameObject[] championes;
     
     [Header("Listen")]
     [SerializeField] private StringEventChannelSO onNameChanged;
@@ -41,5 +42,35 @@ public class RoomPlayerHUD: NetworkBehaviour
     public void OnDisplayNameChanged(string oldName, string newName)
     {
         nameText.text = newName;
+    }
+
+    public void OnChangeChampion(int oldIndex, int newIndex)
+    {
+        championes[oldIndex].SetActive(false);
+        championes[newIndex].SetActive(true);
+    }
+
+    [Command]
+    public void CmdChangeUpChampion()
+    {
+        int newChampionIndex = _championIndex + 1;
+
+        if (newChampionIndex >= championes.Length) {
+            _championIndex = 0;
+        } else {
+            _championIndex = newChampionIndex;
+        }
+    }
+
+    [Command]
+    public void CmdChangeDownChampion()
+    {
+        int newChampionIndex = _championIndex - 1;
+
+        if (newChampionIndex < 0) {
+            _championIndex = championes.Length - 1;
+        } else {
+            _championIndex = newChampionIndex;
+        }
     }
 }
