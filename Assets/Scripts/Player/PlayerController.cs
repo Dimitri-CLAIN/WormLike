@@ -1,7 +1,9 @@
 ﻿
 using System;
+using KawaiiImplementation;
 using Mirror;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 public class PlayerController : NetworkBehaviour
@@ -13,6 +15,12 @@ public class PlayerController : NetworkBehaviour
     private CharacterController controller = null;
     [SerializeField]
     private Worm worm;
+
+    // Slimes
+    [SerializeField]
+    private Transform slimeHolder;
+    public AnimateSlime slimeAnimator;
+    
 
     #endregion
 
@@ -32,17 +40,53 @@ public class PlayerController : NetworkBehaviour
     private float velocity;
     private float previousMovement;
     private bool isJumpTriggered;
+    
+    //slime
+    [SerializeField]
+    [Range(0, 90)]
+    private float lookDirectionAngleDiff = 35f;
+    
 
     #endregion
 
+    #region Bind Actions
+
+    private void BindSetMovement(InputAction.CallbackContext ctx) => SetMovement(ctx.ReadValue<float>());
+    private void BindResetMovement(InputAction.CallbackContext ctx) => ResetMovement();
+    private void BindTriggerJump(InputAction.CallbackContext ctx) => TriggerJump();
+    
+    // Slime Actions
+    private void BindSlimeMovement(InputAction.CallbackContext ctx) => SetSlimeMovement(ctx.ReadValue<float>());
+    private void BindSlimeIdle(InputAction.CallbackContext ctx) => SetSlimeIdle();
+    private void BindSlimeJump(InputAction.CallbackContext ctx) => TriggerSlimeJump();
+
+    #endregion
+    
 
     public override void OnStartAuthority()
     {
         enabled = true;
         
-        worm.Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<float>());
-        worm.Controls.Player.Move.canceled += ctx => ResetMovement();
-        worm.Controls.Player.Jump.performed += ctx => isJumpTriggered = true; // only true if turn is active
+        worm.Controls.Player.Move.performed += BindSetMovement;
+        worm.Controls.Player.Move.canceled += BindResetMovement;
+        worm.Controls.Player.Jump.performed += BindTriggerJump;
+        
+        // slime
+        worm.Controls.Player.Move.performed += BindSlimeMovement;
+        worm.Controls.Player.Move.canceled += BindSlimeIdle;
+        worm.Controls.Player.Jump.performed += BindSlimeJump;
+    }
+
+    public override void OnStopAuthority()
+    {
+        worm.Controls.Player.Move.performed -= BindSetMovement;
+        worm.Controls.Player.Move.canceled -= BindResetMovement;
+        worm.Controls.Player.Jump.performed -= BindTriggerJump;
+        
+        // slime
+        worm.Controls.Player.Move.performed -= BindSlimeMovement;
+        worm.Controls.Player.Move.canceled -= BindSlimeIdle;
+        worm.Controls.Player.Jump.performed -= BindSlimeJump;
     }
 
     public override void OnStartClient()
@@ -70,6 +114,10 @@ public class PlayerController : NetworkBehaviour
     [Client]
     private void ResetMovement() => previousMovement = 0f;
     
+    
+    [Client]
+    private void TriggerJump() => isJumpTriggered = true;
+
     [Client]
     private void ApplyGravity()
     {
@@ -102,4 +150,36 @@ public class PlayerController : NetworkBehaviour
 
     [Client]
     public bool IsGrounded() => controller.isGrounded;
+
+
+    #region Slime
+
+    private void SetSlimeMovement(float value)
+    {
+        float signMultiplier = value > 0 ? 1 : -1;
+        slimeHolder.localEulerAngles = new Vector3(0, 180 - (signMultiplier * lookDirectionAngleDiff), 0);
+        
+        if (slimeAnimator != null)
+            slimeAnimator.currentState = KawaiiImplementation.SlimeAnimationState.Walk;
+    }
+
+    
+    [Client]
+    private void SetSlimeIdle()
+    {
+        if (slimeAnimator != null)
+            slimeAnimator.currentState = KawaiiImplementation.SlimeAnimationState.Idle;
+    }
+
+
+
+    [Client]
+    private void TriggerSlimeJump()
+    {
+        if (slimeAnimator == null)
+            return;
+        slimeAnimator.currentState = IsGrounded() ? KawaiiImplementation.SlimeAnimationState.Idle : KawaiiImplementation.SlimeAnimationState.Jump;
+    }
+
+    #endregion
 }

@@ -121,7 +121,50 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2819453957176629099}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2509724120503517725}
+        m_TargetAssemblyTypeName: PlayerCanvas, Assembly-CSharp
+        m_MethodName: EndTurnButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &242591021157061080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8621221041451735000}
+  m_Layer: 9
+  m_Name: SlimeHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8621221041451735000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242591021157061080}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: -0.9649108, z: -0.0014422}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2484928464665239685}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &488907402072492003
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,12 +784,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8457254207794613595}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5041738, y: 8, z: 6.3604407}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7098317565895259521}
   - {fileID: 92745295677149700}
+  - {fileID: 8621221041451735000}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -765,7 +809,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8457254207794613595}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -912,8 +956,10 @@ MonoBehaviour:
   syncInterval: 0.1
   playColor: {r: 1, g: 0, b: 0, a: 1}
   meshRenderer: {fileID: 877890648784275579}
+  slimeHolder: {fileID: 8621221041451735000}
   controller: {fileID: 3560976584307125083}
   weapon: {fileID: 5839483686137611349}
+  canvas: {fileID: 2509724120503517725}
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,9 +977,11 @@ MonoBehaviour:
   syncInterval: 0.1
   controller: {fileID: 3754037417146107246}
   worm: {fileID: 2912335906408967834}
+  slimeHolder: {fileID: 8621221041451735000}
   movementSpeed: 5
   jumpForce: 4
   gravityMultiplier: 1
+  lookDirectionAngleDiff: 35
 --- !u!114 &5839483686137611349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,9 +1002,9 @@ MonoBehaviour:
   shoulder: {fileID: 7098317565895259521}
   crosshairTransform: {fileID: 8123250385131432403}
   worm: {fileID: 2912335906408967834}
+  bazookaProjectilePrefab: {fileID: 5271905729884256243, guid: ef1eaab00d11fb145ab570188bc6ee8b, type: 3}
   angleSetter: 0
   sensitivity: 1
-  bazookaProjectilePrefab: {fileID: 5271905729884256243, guid: ef1eaab00d11fb145ab570188bc6ee8b, type: 3}
 --- !u!114 &7190902718148815006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,7 +1020,7 @@ MonoBehaviour:
   syncDirection: 1
   syncMode: 0
   syncInterval: 0
-  target: {fileID: 2484928464665239685}
+  target: {fileID: 8123250385131432403}
   clientAuthority: 0
   syncPosition: 1
   syncRotation: 1
@@ -1032,6 +1080,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  worm: {fileID: 2912335906408967834}
   canvas: {fileID: 3076965826777871977}
   turnDisplay: {fileID: 600765408911059214}
   chrono: {fileID: 8045956349926170440}

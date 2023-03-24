@@ -23,6 +23,9 @@ public class WormRoomManager : NetworkRoomManager
 {
     public List<NetworkConnectionToClient> connections = new List<NetworkConnectionToClient>();
     
+    [Header("Slimes")]
+    public KawaiiSlimeSelector slimeSelector;
+    
     #region Server Callbacks
 
     /// <summary>
@@ -122,7 +125,7 @@ public class WormRoomManager : NetworkRoomManager
         GameManager gameManager = GameManager.instance;
         if (gameManager == null)
         {
-            Debug.Log($"<color=red>Game Manager not instanciated</color>");
+            Debug.Log($"<color=red>Game Manager not instantiated</color>");
             return false;
         }
         
@@ -132,8 +135,10 @@ public class WormRoomManager : NetworkRoomManager
             Debug.Log($"<color=red>Worm component not found in current iteration ConnToClient</color>");
             return false;
         }
+        
+        p.slimeType = (KawaiiSlimeSelector.KawaiiSlime)Random.Range(0, 8);
         gameManager.AddPlayer(p);
-        return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+        return true;
     }
 
     /// <summary>

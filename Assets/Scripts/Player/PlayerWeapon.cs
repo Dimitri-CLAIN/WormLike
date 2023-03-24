@@ -24,6 +24,8 @@ public class PlayerWeapon : NetworkBehaviour
     [SerializeField]
     private Worm worm;
     private BazookaProjectile projectileBazookaInstance = null;
+    [SerializeField]
+    private BazookaProjectile bazookaProjectilePrefab;
     #endregion
 
     #region ShotAngle
@@ -34,15 +36,14 @@ public class PlayerWeapon : NetworkBehaviour
     [SerializeField]
     [Range(0.1f, 10f)]
     private float sensitivity = 1f;
+    private bool isLookingLeft = false;
     
     #endregion
 
     private bool isShotTriggered = false;
     private float startChrono = 0f;
 
-    [SerializeField]
-    private BazookaProjectile bazookaProjectilePrefab;
-    
+    public event Action OnShotTriggered;    
     
     #region BindControls
     
@@ -52,7 +53,7 @@ public class PlayerWeapon : NetworkBehaviour
     private void BindResetAim(InputAction.CallbackContext ctx) => ResetAim();
     private void BindStartShot(InputAction.CallbackContext ctx) => StartShot();
     private void BindReleaseShot(InputAction.CallbackContext ctx) => ReleaseShot();
-    
+    private void BindLookingDirection(InputAction.CallbackContext ctx) => SetLookingDirection(ctx.ReadValue<float>());
     #endregion
 
     /// <summary>
@@ -62,6 +63,7 @@ public class PlayerWeapon : NetworkBehaviour
     {
         enabled = true;
         
+        worm.Controls.Player.Move.performed += BindLookingDirection;
         worm.Controls.Player.Jump.performed += BindHolsterWeapon;
         worm.Controls.Player.Jump.canceled += BindDrawWeapon;
         worm.Controls.Player.Aim.performed += BindSetAim;
@@ -155,6 +157,7 @@ public class PlayerWeapon : NetworkBehaviour
         isShotTriggered = false;
         worm.Controls.Player.Move.Enable();
         worm.Controls.Player.Shoot.Disable();
+        OnShotTriggered?.Invoke();
     }
 
 
@@ -169,6 +172,7 @@ public class PlayerWeapon : NetworkBehaviour
     private void Update()
     {
         ApplyAim();
+        // Debug.Log($"<color=white>Aim angle is {aimAngle} angleSetter is {angleSetter}</color>");
         if (isShotTriggered)
             UpdatePowerIndicator();
     }
@@ -189,6 +193,14 @@ public class PlayerWeapon : NetworkBehaviour
         
         crosshairTransform.RotateAround(shoulder.position, Vector3.forward, angleSetter);
     }
+
+
+    /// <summary>
+    /// Sets whether or not the player is currently looking left (aims to help the aiming logic
+    /// </summary>
+    /// <param name="value">-1 means left, 1 means right</param>
+    [Client]
+    private void SetLookingDirection(float value) => isLookingLeft = value < 0;
     
     #endregion  
     

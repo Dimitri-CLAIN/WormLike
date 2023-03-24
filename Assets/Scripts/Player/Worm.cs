@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KawaiiImplementation;
 using Mirror;
 using UnityEngine;
 
@@ -13,6 +14,21 @@ public class Worm : NetworkBehaviour
     private Color color;
     [SerializeField]
     private MeshRenderer meshRenderer;
+    [SyncVar(hook = nameof(AssignSlimeType))]
+    public KawaiiSlimeSelector.KawaiiSlime slimeType;
+    [SerializeField]
+    private List<GameObject> slimes;
+    
+    #endregion
+
+    #region Slime's Components
+
+    [SerializeField]
+    private Transform slimeHolder;
+    public Transform SlimeHolder => slimeHolder;
+    // [SyncVar(hook = nameof(HandleChangeSlime))]
+    public GameObject slime;
+
     #endregion
 
     private GameManager gameManager;
@@ -41,13 +57,18 @@ public class Worm : NetworkBehaviour
 
     [SerializeField]
     private PlayerController controller;
-    public PlayerController Controller
-    { get => controller; }
+    public PlayerController Controller => controller;
     [SerializeField]
     private PlayerWeapon weapon;
-    public PlayerWeapon Weapon
-    { get => weapon; }
-    
+    public PlayerWeapon Weapon => weapon;
+
+    [SerializeField]
+    private PlayerCanvas canvas;
+    public PlayerCanvas Canvas => canvas;
+
+    private PlayerCamera camera;
+    public PlayerCamera Camera => camera;
+
     public event Action OnTurnStarted;
     public event Action OnTurnEnded;
 
@@ -60,12 +81,13 @@ public class Worm : NetworkBehaviour
     /// Start the turn of the player client-wise
     /// </summary>
     [Server]
-    public void StartTurn()
+    public void StartTurn(int time)
     {
         IsTurnActive = true;
         color = playColor;
         TargetToggleControls(this.connectionToClient, true);
         OnTurnStarted?.Invoke();
+        canvas.TargetEnableTurnHUD(this.connectionToClient, time);
     }
     
 
@@ -79,9 +101,15 @@ public class Worm : NetworkBehaviour
         color = originalColor;
         TargetToggleControls(this.connectionToClient, false);
         OnTurnEnded?.Invoke();
+        canvas.TargetDisableTurnHUD(this.connectionToClient);
     }
 
-    
+
+    [Server]
+    public void CreateMySlime(GameObject theSlime)
+    {
+        slime = Instantiate(theSlime, slimeHolder);
+    }
     
     #endregion
 
@@ -112,6 +140,61 @@ public class Worm : NetworkBehaviour
             Controls.Enable();
         else
             Controls.Disable();
+    }
+    
+    
+    [Client]
+    public void SetSlime(GameObject slimeObject)
+    {
+        slime = Instantiate(slimeObject, slimeHolder);
+        NetworkServer.Spawn(slime);
+        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
+    }
+    
+    
+    [ClientRpc]
+    public void RpcSetSlime(GameObject slimeObject, KawaiiSlimeSelector.KawaiiSlime type)
+    {
+        if (slimeObject != null)
+        {
+            Debug.Log($"<color=green>slime object != null !</color>");
+            slime = Instantiate(slimeObject, slimeHolder);
+        } else
+        {
+            GameTestNetworkManager manager = NetworkManager.singleton as GameTestNetworkManager;
+            slime = Instantiate(manager.slimeSelector.SelectSlime(type), slimeHolder);
+            
+        }
+        NetworkServer.Spawn(slime);
+        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
+    }
+
+
+    [TargetRpc]
+    public void TargetSetSlime(NetworkConnection conn, GameObject slimeObject)
+    {
+        slime = Instantiate(slimeObject, slimeHolder);
+        NetworkServer.Spawn(slime);
+        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
+    }
+
+
+
+    [Client]
+    private void HandleChangeSlime(GameObject oldSlime, GameObject newSlime)
+    {
+        Debug.Log($"<color=blue>Update Slime</color>");
+        slime = newSlime;
+    }
+
+
+    [Client]
+    private void AssignSlimeType(KawaiiSlimeSelector.KawaiiSlime oldType, KawaiiSlimeSelector.KawaiiSlime newType)
+    {
+        slime = slimes[(int)newType];
+        
+        slimes[(int)oldType].SetActive(false);
+        slimes[(int)newType].SetActive(true);
     }
     
     #endregion

@@ -6,13 +6,16 @@ using UnityEngine;
 public class GameManager : NetworkBehaviour 
 {
     [SerializeField]
-    private float turnTime = 10f;
+    private int turnTime = 10;
     [SerializeField]
-    private float intervalTime = 2f;
+    private int intervalTime = 2;
     [SerializeField]
     private List<Worm> players = new List<Worm>();
     
     public static GameManager instance;
+
+    Coroutine playerTurnCoroutine;
+    private bool shouldStopTurn = false;
 
     private void Awake () => instance = this;
     
@@ -58,12 +61,33 @@ public class GameManager : NetworkBehaviour
             {
                 if (ConditionForEndOfGameIsTrue())
                     yield break; // TODO end of game
-                worm.StartTurn();
-                yield return new WaitForSeconds(turnTime);
+                worm.StartTurn(turnTime);
+                playerTurnCoroutine = StartCoroutine(RunTurnCountdown(turnTime));
+                yield return RunTurnCountdown(turnTime);
+                Debug.Log($"<color=blue>Turn ended</color>");
+                // yield return new WaitForSeconds(turnTime);
                 worm.EndTurn();
                 yield return new WaitForSeconds(intervalTime);
             }
             nbTurns--;
+        }
+    }
+    
+    
+    [Server]
+    private IEnumerator RunTurnCountdown(int turn)
+    {
+        float timer = turn;
+        shouldStopTurn = false;
+        
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+            if (shouldStopTurn == true)
+            {
+                yield break;
+            }
+            yield return null;
         }
     }
     
@@ -77,6 +101,8 @@ public class GameManager : NetworkBehaviour
         if (false) // TODO max nb players or party already running
             Debug.Log("<color=red>" + "Cannot add a player" + "</color>");
         players.Add(p);
+        p.Weapon.OnShotTriggered += EndPlayerTurn;
+        p.Canvas.OnButtonEndTurnPressed += EndPlayerTurn;
     }
 
 
@@ -88,7 +114,13 @@ public class GameManager : NetworkBehaviour
     public void RemovePlayer(Worm p)
     {
         players.Remove(p);
+        p.Weapon.OnShotTriggered -= EndPlayerTurn;
+        p.Canvas.OnButtonEndTurnPressed -= EndPlayerTurn;
     }
+
+
+    [Server]
+    private void EndPlayerTurn() => shouldStopTurn = true;
     
     #endregion
 }

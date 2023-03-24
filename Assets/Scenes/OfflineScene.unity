@@ -386,7 +386,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 8457254207794613595, guid: 48e7133c9c71d4445815e6c4ccaf6d3f, type: 3}
+  playerPrefab: {fileID: 8457254207794613595, guid: d0fae34566f92bf4794efa8cfb597b14, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
@@ -401,6 +401,7 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+  slimeSelector: {fileID: 11400000, guid: 3a34457bd2b02204c99959c8cae3a6b2, type: 2}
 --- !u!114 &1372249599
 MonoBehaviour:
   m_ObjectHideFlags: 0
