@@ -66,14 +66,14 @@ public class Worm : NetworkBehaviour
     private PlayerCanvas canvas;
     public PlayerCanvas Canvas => canvas;
 
+    private PlayerCamera camera;
+    public PlayerCamera Camera => camera;
 
     public event Action OnTurnStarted;
     public event Action OnTurnEnded;
 
     #endregion
 
-
-    
     
     #region Server
 
@@ -195,22 +195,6 @@ public class Worm : NetworkBehaviour
         
         slimes[(int)oldType].SetActive(false);
         slimes[(int)newType].SetActive(true);
-
-        // if (slime == null) // no other slime previously assigned
-        // {   
-        //     slime = slimes[(int)newType];
-        //     slime.SetActive(true);
-        //     for (int i = 0; i < slimes.Count; i++)
-        //     {
-        //         if (i != (int)newType) Destroy(slimes[i]);
-        //     }
-        // } else
-        // {
-        //     slime = slimes[(int)newType];
-        //
-        //     slimes[(int)oldType].SetActive(false);
-        //     slimes[(int)newType].SetActive(true);
-        // }
     }
     
     #endregion

@@ -779,6 +779,7 @@ GameObject:
   - component: {fileID: 8072542299977739188}
   - component: {fileID: 2509724120503517725}
   - component: {fileID: 6215078872141546723}
+  - component: {fileID: 1519658098339734048}
   m_Layer: 9
   m_Name: Slime
   m_TagString: Player
@@ -1135,6 +1136,22 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &1519658098339734048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8457254207794613595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2850cbfce8222d94a82038c300f7f4c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  worm: {fileID: 2912335906408967834}
 --- !u!1 &8464388196832840115
 GameObject:
   m_ObjectHideFlags: 0
