@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KawaiiImplementation;
 using Mirror;
 using UnityEngine;
 
@@ -13,6 +14,17 @@ public class Worm : NetworkBehaviour
     private Color color;
     [SerializeField]
     private MeshRenderer meshRenderer;
+    public KawaiiSlimeSelector.KawaiiSlime slimeType;
+    #endregion
+
+    #region Slime's Components
+
+    [SerializeField]
+    private Transform slimeHolder;
+    public Transform SlimeHolder => slimeHolder;
+    // [SyncVar(hook = nameof(HandleChangeSlime))]
+    public GameObject slime;
+
     #endregion
 
     private GameManager gameManager;
@@ -56,6 +68,8 @@ public class Worm : NetworkBehaviour
 
     #endregion
 
+
+    
     
     #region Server
 
@@ -86,7 +100,12 @@ public class Worm : NetworkBehaviour
         canvas.TargetDisableTurnHUD(this.connectionToClient);
     }
 
-    
+
+    [Server]
+    public void CreateMySlime(GameObject theSlime)
+    {
+        slime = Instantiate(theSlime, slimeHolder);
+    }
     
     #endregion
 
@@ -117,6 +136,51 @@ public class Worm : NetworkBehaviour
             Controls.Enable();
         else
             Controls.Disable();
+    }
+    
+    
+    [Client]
+    public void SetSlime(GameObject slimeObject)
+    {
+        slime = Instantiate(slimeObject, slimeHolder);
+        NetworkServer.Spawn(slime);
+        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
+    }
+    
+    
+    [ClientRpc]
+    public void RpcSetSlime(GameObject slimeObject, KawaiiSlimeSelector.KawaiiSlime type)
+    {
+        if (slimeObject != null)
+        {
+            Debug.Log($"<color=green>slime object != null !</color>");
+            slime = Instantiate(slimeObject, slimeHolder);
+        } else
+        {
+            GameTestNetworkManager manager = NetworkManager.singleton as GameTestNetworkManager;
+            slime = Instantiate(manager.slimeSelector.SelectSlime(type), slimeHolder);
+            
+        }
+        NetworkServer.Spawn(slime);
+        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
+    }
+
+
+    [TargetRpc]
+    public void TargetSetSlime(NetworkConnection conn, GameObject slimeObject)
+    {
+        slime = Instantiate(slimeObject, slimeHolder);
+        NetworkServer.Spawn(slime);
+        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
+    }
+
+
+
+    [Client]
+    private void HandleChangeSlime(GameObject oldSlime, GameObject newSlime)
+    {
+        Debug.Log($"<color=blue>Update Slime</color>");
+        slime = newSlime;
     }
     
     #endregion

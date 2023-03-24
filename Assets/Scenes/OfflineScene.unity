@@ -400,6 +400,7 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
+  slimeSelector: {fileID: 11400000, guid: 3a34457bd2b02204c99959c8cae3a6b2, type: 2}
 --- !u!114 &1372249599
 MonoBehaviour:
   m_ObjectHideFlags: 0

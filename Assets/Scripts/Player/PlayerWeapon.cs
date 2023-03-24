@@ -172,7 +172,7 @@ public class PlayerWeapon : NetworkBehaviour
     private void Update()
     {
         ApplyAim();
-        Debug.Log($"<color=white>Aim angle is {aimAngle} angleSetter is {angleSetter}</color>");
+        // Debug.Log($"<color=white>Aim angle is {aimAngle} angleSetter is {angleSetter}</color>");
         if (isShotTriggered)
             UpdatePowerIndicator();
     }
