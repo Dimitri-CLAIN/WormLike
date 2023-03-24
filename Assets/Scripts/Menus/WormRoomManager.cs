@@ -133,8 +133,8 @@ public class WormRoomManager : NetworkRoomManager
             Debug.Log($"<color=red>Worm component not found in current iteration ConnToClient</color>");
             return false;
         }
-        GameObject slime = slimeSelector.SelectSlimeByInt(Random.Range(0, 8)); 
-        p.RpcSetSlime(slime, KawaiiSlimeSelector.KawaiiSlime.ChongusSlime);
+        
+        p.slimeType = (KawaiiSlimeSelector.KawaiiSlime)Random.Range(0, 8);
         gameManager.AddPlayer(p);
         return true;
     }

@@ -14,7 +14,11 @@ public class Worm : NetworkBehaviour
     private Color color;
     [SerializeField]
     private MeshRenderer meshRenderer;
+    [SyncVar(hook = nameof(AssignSlimeType))]
     public KawaiiSlimeSelector.KawaiiSlime slimeType;
+    [SerializeField]
+    private List<GameObject> slimes;
+    
     #endregion
 
     #region Slime's Components
@@ -181,6 +185,32 @@ public class Worm : NetworkBehaviour
     {
         Debug.Log($"<color=blue>Update Slime</color>");
         slime = newSlime;
+    }
+
+
+    [Client]
+    private void AssignSlimeType(KawaiiSlimeSelector.KawaiiSlime oldType, KawaiiSlimeSelector.KawaiiSlime newType)
+    {
+        slime = slimes[(int)newType];
+        
+        slimes[(int)oldType].SetActive(false);
+        slimes[(int)newType].SetActive(true);
+
+        // if (slime == null) // no other slime previously assigned
+        // {   
+        //     slime = slimes[(int)newType];
+        //     slime.SetActive(true);
+        //     for (int i = 0; i < slimes.Count; i++)
+        //     {
+        //         if (i != (int)newType) Destroy(slimes[i]);
+        //     }
+        // } else
+        // {
+        //     slime = slimes[(int)newType];
+        //
+        //     slimes[(int)oldType].SetActive(false);
+        //     slimes[(int)newType].SetActive(true);
+        // }
     }
     
     #endregion
