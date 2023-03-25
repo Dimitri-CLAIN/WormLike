@@ -18,7 +18,6 @@ public class PlayerNameInput : NetworkBehaviour
 
     private void Start() => SetUpInputField();
 
-    [Client]
     private void SetUpInputField()
     {
         if (!PlayerPrefs.HasKey(PlayerPrefsNameKey)) { return; }
@@ -32,16 +31,24 @@ public class PlayerNameInput : NetworkBehaviour
         SetPlayerName(defaultName);
     }
 
+    [ClientCallback]
     public void SetPlayerName(string name)
     {
         if (!isLocalPlayer) { return; }
         continueButton.interactable = !string.IsNullOrEmpty(name);
     }
 
-    public void CmdSavePlayerName()
+    [ClientCallback]
+    public void OnInputEnded()
+    {
+        CmdSavePlayerName(nameInputField.text);
+    }
+
+    [Command]
+    public void CmdSavePlayerName(string name)
     {
         if (!isLocalPlayer) { return; }
-        DisplayName = nameInputField.text;
+        DisplayName = name;
 
         PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);
         onNameChanged.RaiseEvent(DisplayName);

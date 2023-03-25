@@ -18,6 +18,8 @@ public class WormRoomPlayer : NetworkRoomPlayer
     public RoomPlayerHUD roomPlayerHUDPrefab;
     [HideInInspector]
     public RoomPlayerHUD hudInstance;
+    [SyncVar(hook = nameof(OnChampionIndexChanged))]
+    private int _championIndex = 0;
 
     #region Start & Stop Callbacks
 
@@ -64,6 +66,8 @@ public class WormRoomPlayer : NetworkRoomPlayer
         if (isLocalPlayer)
         {
             hudInstance.editButtons.gameObject.SetActive(true);
+            hudInstance.rightEditButton.onClick.AddListener(delegate { CmdChangeUpChampion(_championIndex); });
+            hudInstance.leftEditButton.onClick.AddListener(delegate { CmdChangeDownChampion(_championIndex); });
         }
     }
 
@@ -72,6 +76,36 @@ public class WormRoomPlayer : NetworkRoomPlayer
     /// <para>When NetworkIdentity.RemoveClientAuthority is called on the server, this will be called on the client that owns the object.</para>
     /// </summary>
     public override void OnStopAuthority() { }
+
+    [Client]
+    public void OnChampionIndexChanged(int oldIndex, int newIndex)
+    {
+        hudInstance.OnChampionChanged(oldIndex, newIndex);
+    }
+    
+    [Command]
+    public void CmdChangeUpChampion(int idx)
+    {
+        int newChampionIndex = idx + 1;
+
+        if (newChampionIndex >= hudInstance.championes.Length) {
+            _championIndex = 0;
+        } else {
+            _championIndex = newChampionIndex;
+        }
+    }
+
+    [Command]
+    public void CmdChangeDownChampion(int idx)
+    {
+        int newChampionIndex = idx - 1;
+
+        if (newChampionIndex < 0) {
+            _championIndex = hudInstance.championes.Length - 1;
+        } else {
+            _championIndex = newChampionIndex;
+        }
+    }
 
     #endregion
 
