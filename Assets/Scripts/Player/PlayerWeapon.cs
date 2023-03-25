@@ -157,7 +157,6 @@ public class PlayerWeapon : NetworkBehaviour
         isShotTriggered = false;
         worm.Controls.Player.Move.Enable();
         worm.Controls.Player.Shoot.Disable();
-        OnShotTriggered?.Invoke();
     }
 
 
@@ -217,6 +216,7 @@ public class PlayerWeapon : NetworkBehaviour
         projectileBazookaInstance = Instantiate(bazookaProjectilePrefab, crosshairTransform.position, crosshairTransform.rotation);
         NetworkServer.Spawn(projectileBazookaInstance.gameObject);
         projectileBazookaInstance.RpcFireWeapon(angle, shotPower);
+        OnShotTriggered?.Invoke();
     }
     
     #endregion

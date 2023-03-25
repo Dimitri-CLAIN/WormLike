@@ -76,7 +76,7 @@ public class Health : NetworkBehaviour
         if (health <= 0)
         {
             OnDeath?.Invoke();
-            NetworkServer.Destroy(this.gameObject);
+            // NetworkServer.Destroy(this.gameObject);
         }
         if (healthbar != null)
         {
