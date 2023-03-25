@@ -18,7 +18,13 @@ public class GameManager : NetworkBehaviour
     private bool shouldStopTurn = false;
 
     private void Awake () => instance = this;
-    
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        Invoke(nameof(LaunchGame), 2f);
+    }
+
     #region Server
 
     /// <summary>
@@ -39,7 +45,14 @@ public class GameManager : NetworkBehaviour
     [Server]
     private bool ConditionForEndOfGameIsTrue()
     {
-        // TODO
+        int playersAlive = 0;
+        foreach (Worm worm in players)
+        {
+            if (worm.Health.HealthPoints > 0)
+                playersAlive++;
+        }
+        if (playersAlive <= 1)
+            return true;
         return false;
     }
 
@@ -51,25 +64,20 @@ public class GameManager : NetworkBehaviour
     [Server]
     public IEnumerator RunGame()
     {
-        // temp variable
-        int nbTurns = 3;
-
-        // temp while, should be a while (true) at the end
-        while (nbTurns >= 0)
+        while (true)
         {
             foreach (Worm worm in players)
             {
                 if (ConditionForEndOfGameIsTrue())
-                    yield break; // TODO end of game
+                    yield break;
+                else if (worm.Health.HealthPoints <= 0)
+                    continue;
                 worm.StartTurn(turnTime);
                 playerTurnCoroutine = StartCoroutine(RunTurnCountdown(turnTime));
                 yield return RunTurnCountdown(turnTime);
-                Debug.Log($"<color=blue>Turn ended</color>");
-                // yield return new WaitForSeconds(turnTime);
                 worm.EndTurn();
                 yield return new WaitForSeconds(intervalTime);
             }
-            nbTurns--;
         }
     }
     

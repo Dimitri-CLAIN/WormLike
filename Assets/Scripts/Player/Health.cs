@@ -14,6 +14,12 @@ public class Health : NetworkBehaviour
     [SyncVar(hook = nameof(HandleHealthChange))]
     protected int health;
 
+    public int HealthPoints
+    {
+        get => health;
+        private set => health = value;
+    }
+
     public event Action OnDeath;
 
     #region Visuals

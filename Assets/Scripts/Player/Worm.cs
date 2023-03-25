@@ -69,6 +69,14 @@ public class Worm : NetworkBehaviour
     private PlayerCamera camera;
     public PlayerCamera Camera => camera;
 
+    [SerializeField]
+    private Health health;
+    public Health Health
+    {
+        get => health;
+        private set => health = value;
+    }
+
     public event Action OnTurnStarted;
     public event Action OnTurnEnded;
 

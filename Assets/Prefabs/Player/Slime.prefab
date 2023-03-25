@@ -1772,6 +1772,7 @@ MonoBehaviour:
   controller: {fileID: 3560976584307125083}
   weapon: {fileID: 5839483686137611349}
   canvas: {fileID: 2509724120503517725}
+  health: {fileID: 8674845843585338097}
 --- !u!114 &3560976584307125083
 MonoBehaviour:
   m_ObjectHideFlags: 0
