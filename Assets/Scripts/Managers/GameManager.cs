@@ -59,6 +59,7 @@ public class GameManager : NetworkBehaviour
     
     /// <summary>
     /// Runs the game logic on the server and interaction between players
+    /// <para>Disconnect and go back to room oes not work SMH...</para>
     /// </summary>
     /// <returns>IEnum</returns>
     [Server]
@@ -72,7 +73,17 @@ public class GameManager : NetworkBehaviour
                 {
                     WormRoomManager wormRoomManager = NetworkRoomManager.singleton as WormRoomManager;
                     if (wormRoomManager != null)
-                        wormRoomManager.ReturnToRoomScene();
+                    {
+                        // wormRoomManager.ReturnToRoomScene();
+                        foreach (var players in NetworkServer.connections)
+                        {
+                            if (players.Value.identity.isClientOnly)
+                                wormRoomManager.StopClient();
+                            else
+                                wormRoomManager.StopHost();
+                        }
+                    }
+                    
                 }
                 else if (worm.Health.HealthPoints <= 0)
                     continue;
