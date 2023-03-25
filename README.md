@@ -18,10 +18,24 @@ We wanted to create a Room with a Lobby before the game that allows the clients 
 We also wanted to adapt the [Marching Squares](https://en.wikipedia.org/wiki/Marching_squares) algorithm to allow the host to generate procedural maps that would fit the needs of our game but that was a bit too advanced...  
 
 ## CLONING, PLAYING AND WORKING ON OUR GAME
+### Bindings
+Those bindings are supposed to be keyboard layout's independent, meaning on a different keyboard layout than AZERTY, it is *supposed* to work, but we didn't test it ([here's why](https://media.discordapp.net/attachments/1078794808673435648/1089170008267030639/Eha7r9KWsAIoXDr.png?width=474&height=671))
+- [ Q/D ] : Left & Right
+- [ Z/S ] : Aim Up/Down
+- [ Space ] : Jump
+- [ X (Hold) ] : Shoot (Increase Shot Power)
+- [ Mouse Drag & Wheel ] : Move Camera & Zoom
+- [ T ] : Reset Camera
+
+
 ### Important information
 To play our game, the host must enable port forwarding on 7777 on his/her router to allow clients from other networks to connect to his game instance. The game is still playable if he/she wants to play locally by creating multiple instances of the game.
 ### Working on the game
 Feel free to check the code and message us if you have any questions or inquiries about what's going on, we'll do our best to help! :>
+
+### How to improve our game
+We struggled to comprehend every aspects of Mirror and lacked time to implement everything we aimed to add to our game, resulting in a *not so pretty* game result. It is still playable, players can move and shoot around, destroying the one and only map asset we have (that is not generated using the Marching Squares algorithm), but we have a big issue exiting the Game Scene. Moreover, we have little to no customization on the Lobby, and our menus are very 101 basic (we spent a lot of time trying to implement [Mirror's Room System](https://mirror-networking.gitbook.io/docs/manual/examples/room), yet not enough...).  
+Clearly, our game could be better and improved.
 
 ## CREDITS
 ### Developers
