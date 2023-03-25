@@ -74,6 +74,11 @@ public class GameManager : NetworkBehaviour
     }
     
     
+    /// <summary>
+    /// Countdown that can be interrupted whenever the <c>shouldStopTurn</c> is true
+    /// </summary>
+    /// <param name="turn">Number of seconds to count down</param>
+    /// <returns>IEnumerator</returns>
     [Server]
     private IEnumerator RunTurnCountdown(int turn)
     {
@@ -119,6 +124,9 @@ public class GameManager : NetworkBehaviour
     }
 
 
+    /// <summary>
+    /// Sets the <c>shouldStopTurn</c> to true in this instance
+    /// </summary>
     [Server]
     private void EndPlayerTurn() => shouldStopTurn = true;
     
