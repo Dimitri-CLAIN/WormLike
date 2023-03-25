@@ -138,9 +138,9 @@ public class Worm : NetworkBehaviour
     private void TargetToggleControls(NetworkConnection conn, bool toggle)
     {
         if (toggle)
-            Controls.Enable();
+            Controls.Player.Enable();
         else
-            Controls.Disable();
+            Controls.Player.Disable();
     }
 
 
