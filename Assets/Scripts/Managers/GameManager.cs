@@ -69,7 +69,11 @@ public class GameManager : NetworkBehaviour
             foreach (Worm worm in players)
             {
                 if (ConditionForEndOfGameIsTrue())
-                    yield break;
+                {
+                    WormRoomManager wormRoomManager = NetworkRoomManager.singleton as WormRoomManager;
+                    if (wormRoomManager != null)
+                        wormRoomManager.ReturnToRoomScene();
+                }
                 else if (worm.Health.HealthPoints <= 0)
                     continue;
                 worm.StartTurn(turnTime);

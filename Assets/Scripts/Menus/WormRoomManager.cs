@@ -156,6 +156,15 @@ public class WormRoomManager : NetworkRoomManager
     /// </summary>
     public override void OnRoomServerPlayersNotReady() { }
 
+
+    /// <summary>
+    /// Allows any script on the server to go back to the room scene 
+    /// </summary>
+    public void ReturnToRoomScene()
+    {
+        ServerChangeScene(RoomScene);
+    }
+    
     #endregion
 
     #region Client Callbacks
