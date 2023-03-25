@@ -1152,6 +1152,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   worm: {fileID: 2912335906408967834}
+  groundZ: 0
 --- !u!1 &8464388196832840115
 GameObject:
   m_ObjectHideFlags: 0

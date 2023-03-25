@@ -103,13 +103,6 @@ public class Worm : NetworkBehaviour
         OnTurnEnded?.Invoke();
         canvas.TargetDisableTurnHUD(this.connectionToClient);
     }
-
-
-    [Server]
-    public void CreateMySlime(GameObject theSlime)
-    {
-        slime = Instantiate(theSlime, slimeHolder);
-    }
     
     #endregion
 
@@ -141,53 +134,13 @@ public class Worm : NetworkBehaviour
         else
             Controls.Disable();
     }
-    
-    
-    [Client]
-    public void SetSlime(GameObject slimeObject)
-    {
-        slime = Instantiate(slimeObject, slimeHolder);
-        NetworkServer.Spawn(slime);
-        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
-    }
-    
-    
-    [ClientRpc]
-    public void RpcSetSlime(GameObject slimeObject, KawaiiSlimeSelector.KawaiiSlime type)
-    {
-        if (slimeObject != null)
-        {
-            Debug.Log($"<color=green>slime object != null !</color>");
-            slime = Instantiate(slimeObject, slimeHolder);
-        } else
-        {
-            GameTestNetworkManager manager = NetworkManager.singleton as GameTestNetworkManager;
-            slime = Instantiate(manager.slimeSelector.SelectSlime(type), slimeHolder);
-            
-        }
-        NetworkServer.Spawn(slime);
-        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
-    }
 
 
-    [TargetRpc]
-    public void TargetSetSlime(NetworkConnection conn, GameObject slimeObject)
-    {
-        slime = Instantiate(slimeObject, slimeHolder);
-        NetworkServer.Spawn(slime);
-        Controller.slimeAnimator = slime.GetComponent<AnimateSlime>();
-    }
-
-
-
-    [Client]
-    private void HandleChangeSlime(GameObject oldSlime, GameObject newSlime)
-    {
-        Debug.Log($"<color=blue>Update Slime</color>");
-        slime = newSlime;
-    }
-
-
+    /// <summary>
+    /// Assign the slime to the player object
+    /// </summary>
+    /// <param name="oldType">old slime</param>
+    /// <param name="newType">new slime</param>
     [Client]
     private void AssignSlimeType(KawaiiSlimeSelector.KawaiiSlime oldType, KawaiiSlimeSelector.KawaiiSlime newType)
     {

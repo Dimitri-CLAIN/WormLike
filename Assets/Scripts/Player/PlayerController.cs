@@ -94,6 +94,7 @@ public class PlayerController : NetworkBehaviour
         worm.Controls.Player.Disable();
     }
 
+    #region Client
 
     [ClientCallback]
     private void Update()
@@ -105,19 +106,34 @@ public class PlayerController : NetworkBehaviour
     }
 
     
+    /// <summary>
+    /// Sets the movement value
+    /// </summary>
+    /// <param name="horizontal">-1 is left, 1 is right</param>
     [Client]
     private void SetMovement(float horizontal)
     {
         previousMovement = horizontal;
     }
 
+    
+    /// <summary>
+    /// Resets the value of horizontal movement so the player idles
+    /// </summary>
     [Client]
     private void ResetMovement() => previousMovement = 0f;
     
     
+    /// <summary>
+    /// Triggers the player's jump
+    /// </summary>
     [Client]
     private void TriggerJump() => isJumpTriggered = true;
 
+    
+    /// <summary>
+    /// Apply gravity to the Player Controller
+    /// </summary>
     [Client]
     private void ApplyGravity()
     {
@@ -131,10 +147,17 @@ public class PlayerController : NetworkBehaviour
         direction.y = velocity;
     }
 
+    
+    /// <summary>
+    /// Apply the movement depending on what has been registered with the inputs
+    /// </summary>
     [Client]
     private void ApplyMovement() => controller.Move(direction * (movementSpeed * Time.deltaTime));
     
     
+    /// <summary>
+    /// Apply the jump if it has been triggered and if the player is grounded
+    /// </summary>
     [Client]
     private void ApplyJump()
     {
@@ -148,12 +171,24 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    
+    /// <summary>
+    /// Checks if the Player Controller is grounded
+    /// </summary>
+    /// <returns></returns>
     [Client]
     public bool IsGrounded() => controller.isGrounded;
 
+    #endregion
 
     #region Slime
 
+    /// <summary>
+    /// Sets the slime movement animation and which way it faces
+    /// <para>Not used as the animation moves on the Z axis</para>
+    /// </summary>
+    /// <param name="value">-1 is left, 1 is right</param>
+    [Client]
     private void SetSlimeMovement(float value)
     {
         float signMultiplier = value > 0 ? 1 : -1;
@@ -163,7 +198,10 @@ public class PlayerController : NetworkBehaviour
             slimeAnimator.currentState = KawaiiImplementation.SlimeAnimationState.Walk;
     }
 
-    
+
+    /// <summary>
+    /// Set the slime anim to idle
+    /// </summary>
     [Client]
     private void SetSlimeIdle()
     {
@@ -172,7 +210,9 @@ public class PlayerController : NetworkBehaviour
     }
 
 
-
+    /// <summary>
+    /// Triggers the slime's jump animation
+    /// </summary>
     [Client]
     private void TriggerSlimeJump()
     {
