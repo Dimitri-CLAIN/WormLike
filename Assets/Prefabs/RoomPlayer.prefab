@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5743962442821210765
+--- !u!1 &3271754785847476058
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8857084950824304854}
-  - component: {fileID: 1617461087075447292}
-  - component: {fileID: 6240290501588938357}
+  - component: {fileID: 8377468462202775164}
+  - component: {fileID: 4518717428237097802}
+  - component: {fileID: 4548306454313801872}
   m_Layer: 0
   m_Name: RoomPlayer
   m_TagString: Untagged
@@ -18,33 +18,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8857084950824304854
+--- !u!224 &8377468462202775164
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5743962442821210765}
+  m_GameObject: {fileID: 3271754785847476058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 641, y: 230}
   m_SizeDelta: {x: 1282, y: 460}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1617461087075447292
+--- !u!114 &4518717428237097802
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5743962442821210765}
+  m_GameObject: {fileID: 3271754785847476058}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
@@ -55,13 +55,13 @@ MonoBehaviour:
   serverOnly: 0
   visible: 0
   hasSpawned: 0
---- !u!114 &6240290501588938357
+--- !u!114 &4548306454313801872
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5743962442821210765}
+  m_GameObject: {fileID: 3271754785847476058}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17ebddd8a3ca2b047b6f5cad3c819e68, type: 3}
@@ -73,5 +73,5 @@ MonoBehaviour:
   showRoomGUI: 1
   readyToBegin: 0
   index: 0
-  roomPlayerHUDPrefab: {fileID: 7910782916250427133, guid: 0964de2535433754897054f7e49f3a5c, type: 3}
+  roomPlayerHUDPrefab: {fileID: 6050591186424146340, guid: 0964de2535433754897054f7e49f3a5c, type: 3}
   hudInstance: {fileID: 0}

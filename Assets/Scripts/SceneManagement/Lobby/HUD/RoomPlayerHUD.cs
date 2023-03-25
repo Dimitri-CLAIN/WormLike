@@ -1,6 +1,7 @@
 using Mirror;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomPlayerHUD: NetworkBehaviour
 {
@@ -8,12 +9,14 @@ public class RoomPlayerHUD: NetworkBehaviour
     [SerializeField] public GameObject editButtons = default;
     [SerializeField] public TMP_Text playerReadyText = default;
     [SerializeField] public TMP_Text nameText;
+    [SerializeField] public Button rightEditButton;
+    [SerializeField] public Button leftEditButton;
 
     [Header("Utils")]
     [SyncVar(hook = nameof(OnDisplayNameChanged))]
     public string DisplayName = "Waiting...";
-    [SyncVar(hook = nameof(OnChangeChampion))]
-    private int _championIndex;
+    [SyncVar(hook = nameof(OnChampionChanged))]
+    private int _championIndex = 0;
 
     [SerializeField] public GameObject[] championes;
     
@@ -39,38 +42,16 @@ public class RoomPlayerHUD: NetworkBehaviour
         DisplayName = newName;
     }
 
+    [Client]
     public void OnDisplayNameChanged(string oldName, string newName)
     {
-        nameText.text = newName;
+        nameText.text = DisplayName;
     }
 
-    public void OnChangeChampion(int oldIndex, int newIndex)
+    [Client]
+    public void OnChampionChanged(int oldIndex, int newIndex)
     {
         championes[oldIndex].SetActive(false);
         championes[newIndex].SetActive(true);
-    }
-
-    [Command]
-    public void CmdChangeUpChampion()
-    {
-        int newChampionIndex = _championIndex + 1;
-
-        if (newChampionIndex >= championes.Length) {
-            _championIndex = 0;
-        } else {
-            _championIndex = newChampionIndex;
-        }
-    }
-
-    [Command]
-    public void CmdChangeDownChampion()
-    {
-        int newChampionIndex = _championIndex - 1;
-
-        if (newChampionIndex < 0) {
-            _championIndex = championes.Length - 1;
-        } else {
-            _championIndex = newChampionIndex;
-        }
     }
 }
